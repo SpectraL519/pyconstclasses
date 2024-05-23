@@ -1,6 +1,7 @@
 # PyConstClasses
 
 [![tests](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests)
+[![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SpectraL519/f6cec4c4c8e1733cfe45f807918a128a/raw/covbadge.json)]()
 
 <!-- TODO: github workflows -->
 
@@ -31,6 +32,7 @@
 * build distribution: `python setup.py sdist bdist_wheel`
 * project venv: `cc_venv`, `test_cc_venv` (for local package installation tests)
 * install package in test venv: `pip install dist/pyconstclasses-0.1-py3-none-any.whl --force-reinstall`
+* test with coverage: `pytest -v constclasses/test/ --cov=constclasses --cov-report=xml --cov-report=html`
 
 <br />
 <br />

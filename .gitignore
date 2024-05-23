@@ -8,10 +8,18 @@
 **/__pycache__/
 **/.pytest_cache/
 
+# tox
+.tox/
+
 # build and distribution files
 build/
 dist/
 pyconstclasses.egg-info/
+
+# code coverage
+.coverage
+coverage.xml
+htmlcov/
 
 # other
 tmp/

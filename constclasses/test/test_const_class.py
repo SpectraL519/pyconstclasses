@@ -9,9 +9,6 @@ class ConstClassBase:
     x: int
     s: str
 
-    def class_method(self) -> bool:
-        return True
-
 ConstClass = const_class(ConstClassBase)
 
 
@@ -19,9 +16,6 @@ ConstClass = const_class(ConstClassBase)
 class ConstClassDecorated():
     x: int
     s: str
-
-    def class_method(self) -> bool:
-        return True
 
 
 test_classes = [ConstClass, ConstClassDecorated]

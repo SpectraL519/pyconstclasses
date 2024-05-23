@@ -9,8 +9,9 @@ jobs:
     name: Run project tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: [pypy3.9, pypy3.10, 3.9, 3.10, 3.11, 3.12]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - name: Checkout
@@ -32,7 +33,7 @@ jobs:
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
         with:
-          name: covdata
+          name: covdata-${{ matrix.python-version }}
           path: .coverage.*
 
 
@@ -56,14 +57,15 @@ jobs:
       - name: Download coverage data
         uses: actions/download-artifact@v4
         with:
-          name: covdata
+          pattern: covdata-*
+          merge-multiple: true
 
       - name: Combine coverage data
         run: |
           python -m tox -e coverage
-          export TOTAL=$(python -c import json;print(json.load(open('coverage.json'))['totals']['percent_covered_display']))
-          echo total=$TOTAL >> $GITHUB_ENV
-          echo ### Total coverage: ${TOTAL}% >> $GITHUB_STEP_SUMMARY
+          export TOTAL_COV=$(python -c "import json; print(json.load(open('coverage.json'))['totals']['percent_covered_display'])")
+          echo total_cov=$TOTAL_COV >> $GITHUB_ENV
+          echo ### Total coverage: ${TOTAL_COV}% >> $GITHUB_STEP_SUMMARY
 
       - name: Generate coverage badge
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -71,8 +73,8 @@ jobs:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: f6cec4c4c8e1733cfe45f807918a128a
           filename: covbadge.json
-          label: Coverage
-          message: ${{ env.total }}%
+          label: coverage
+          message: ${{ env.total_cov }}%
           minColorRange: 50
           maxColorRange: 90
-          valColorRange: ${{ env.total }}
+          valColorRange: ${{ env.total_cov }}

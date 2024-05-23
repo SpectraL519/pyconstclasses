@@ -1,0 +1,16 @@
+# editor
+.vscode/
+
+# python virtual environment
+*venv/
+
+# python cache
+**/__pycache__/
+**/.pytest_cache/
+
+# build and distribution files
+build/
+dist/
+
+# other
+tmp/

@@ -11,6 +11,7 @@
 # build and distribution files
 build/
 dist/
+pyconstclasses.egg-info/
 
 # other
 tmp/

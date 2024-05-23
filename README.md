@@ -28,7 +28,7 @@
 * install requirements: `pip install -r requirements.txt`
 * build distribution: `python setup.py sdist bdist_wheel`
 * project venv: `cc_venv`, `test_cc_venv` (for local package installation tests)
-* install package in test venv: `pip install dist/pyconstclasses-0.1-py3-none-any.whl (--force-reinstall)`
+* install package in test venv: `pip install dist/pyconstclasses-0.1-py3-none-any.whl --force-reinstall`
 
 <br />
 <br />

@@ -2,7 +2,7 @@
 .vscode/
 
 # python virtual environment
-*venv/
+*venv*/
 
 # python cache
 **/__pycache__/

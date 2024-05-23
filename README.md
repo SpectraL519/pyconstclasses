@@ -1,5 +1,7 @@
 # PyConstClasses
 
+[![tests](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests)
+
 <!-- TODO: github workflows -->
 
 <br />

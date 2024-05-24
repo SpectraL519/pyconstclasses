@@ -18,6 +18,7 @@ pyconstclasses.egg-info/
 
 # code coverage
 .coverage*
+!coverage.json
 coverage.*
 coverage_*/
 

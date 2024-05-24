@@ -18,7 +18,7 @@ pyconstclasses.egg-info/
 
 # code coverage
 .coverage
-coverage.xml
+coverage.*
 htmlcov/
 
 # other

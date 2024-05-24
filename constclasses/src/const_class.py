@@ -23,7 +23,7 @@ def _const_class_impl(cls):
     return ConstClass
 
 
-def const_class(cls = None):
+def const_class(cls=None):
     def _wrap(cls):
         return _const_class_impl(cls)
 

@@ -1,4 +1,3 @@
-from typing import Any
 from .ccerror import ArgumentError, ConstError
 
 

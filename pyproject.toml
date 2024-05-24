@@ -34,3 +34,18 @@ test = ["tox"]
 
 [project.urls]
 Repository = "https://github.com/SpectraL519/pyconstclasses.git"
+
+
+[tool.black]
+line-length = 90
+target-version = ['py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git/
+  | \.tox($|/)
+  | .*venv.*/
+  | build/
+  | dist/
+)/
+'''

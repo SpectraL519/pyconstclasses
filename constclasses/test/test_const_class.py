@@ -22,7 +22,9 @@ class ConstClassDecorated:
 test_classes = [ConstClass, ConstClassDecorated]
 
 cls_args_combinations = [
-    pytest.param(cls, args, id=f"cls={cls.__name__}, args={args}") for cls, args in product(test_classes, [(), (1,), (1, 2, 3)])]
+    pytest.param(cls, args, id=f"cls={cls.__name__}, args={args}")
+    for cls, args in product(test_classes, [(), (1,), (1, 2, 3)])
+]
 
 
 @pytest.mark.parametrize("const_cls, init_args", cls_args_combinations)

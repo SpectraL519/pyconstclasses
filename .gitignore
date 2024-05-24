@@ -17,9 +17,9 @@ dist/
 pyconstclasses.egg-info/
 
 # code coverage
-.coverage
+.coverage*
 coverage.*
-htmlcov/
+coverage_*/
 
 # other
 tmp/

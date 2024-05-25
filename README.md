@@ -29,13 +29,15 @@
 
 ## Dev notes
 
-* export requirements: `pip freeze > requirements.txt`
-* install requirements: `pip install -r requirements.txt`
+* export requirements: `pip freeze > requirements-dev.txt`
+* install requirements: `pip install -r requirements-dev.txt`
 * build distribution: `python -m build` (`pip install build`)
 * project venv: `cc_venv`, `test_cc_venv` (for local package installation tests)
 * install package in test venv: `pip install dist/pyconstclasses-0.1-py3-none-any.whl --force-reinstall`
 * test with coverage: `pytest -v constclasses/test/ --cov=constclasses --cov-report=xml --cov-report=html` or `tox`
-* format: `black .` or `python -m black .` (optionally `--check`)
+* format:
+    * `black .` or `python -m black .` (`--check`)
+    * `isort .` or `python -m isort .` (`--check`)
 
 <br />
 <br />

@@ -50,3 +50,15 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.isort]
+py_version=312
+profile = "black"
+src_paths = ["constclasses"]
+skip = [
+  ".git",
+  ".tox",
+  "build",
+  "dist"
+]
+skip_glob = ["*venv*"]

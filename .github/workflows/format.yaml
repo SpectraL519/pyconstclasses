@@ -20,8 +20,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install black
+          python -m pip install black isort
 
       - name: Run format check
         run: |
           python -m black . --check
+
+      - name: Run import check
+        run: |
+          python -m isort . --check

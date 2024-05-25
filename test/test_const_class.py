@@ -1,38 +1,36 @@
-from ..src.const_class import const_class
-from ..src.ccerror import ArgumentError, ConstError
-
 from itertools import product
+
 import pytest
+from constclasses.ccerror import ArgumentError, ConstError
+from constclasses.const_class import const_class
 
 
 class ConstClassBase:
     x: int
     s: str
 
-    def class_method(self) -> bool:
-        return True
 
 ConstClass = const_class(ConstClassBase)
 
 
 @const_class
-class ConstClassDecorated():
+class ConstClassDecorated:
     x: int
     s: str
-
-    def class_method(self) -> bool:
-        return True
 
 
 test_classes = [ConstClass, ConstClassDecorated]
 
+cls_args_combinations = [
+    pytest.param(cls, args, id=f"cls={cls.__name__}, args={args}")
+    for cls, args in product(test_classes, [(), (1,), (1, 2, 3)])
+]
 
-@pytest.mark.parametrize(
-    "const_cls, init_args",
-    [pytest.param(cls, args, id=f"cls={cls.__name__}, args={args}")
-     for cls, args in product(test_classes, [(), (1,), (1, 2, 3)])]
-)
-def test_const_class_initialization_with_invalid_number_of_arguments(const_cls, init_args: list):
+
+@pytest.mark.parametrize("const_cls, init_args", cls_args_combinations)
+def test_const_class_initialization_with_invalid_number_of_arguments(
+    const_cls, init_args: list
+):
     with pytest.raises(ArgumentError) as err:
         _ = const_cls(init_args)
 
@@ -40,7 +38,10 @@ def test_const_class_initialization_with_invalid_number_of_arguments(const_cls, 
     assert err_msg.startswith("Invalid number of arguments")
 
 
-@pytest.mark.parametrize("const_cls", [pytest.param(cls, id=f"cls={cls.__name__}") for cls in test_classes])
+@pytest.mark.parametrize(
+    "const_cls",
+    [pytest.param(cls, id=f"cls={cls.__name__}") for cls in test_classes],
+)
 def test_const_class_member_modification(const_cls):
     x1, s1 = 1, "str1"
     x2, s2 = 2, "str2"

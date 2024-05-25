@@ -1,6 +1,11 @@
 # PyConstClasses
 
-<!-- TODO: github workflows -->
+[![tests](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests)
+[![format](https://github.com/SpectraL519/pyconstclasses/actions/workflows/format.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/format)
+[![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SpectraL519/f6cec4c4c8e1733cfe45f807918a128a/raw/covbadge.json)]()
+
+> [!IMPORTANT]
+> This readme file will be extended later in the development process
 
 <br />
 
@@ -24,11 +29,15 @@
 
 ## Dev notes
 
-* export requirements: `pip freeze > requirements.txt`
-* install requirements: `pip install -r requirements.txt`
-* build distribution: `python setup.py sdist bdist_wheel`
+* export requirements: `pip freeze > requirements-dev.txt`
+* install requirements: `pip install -r requirements-dev.txt`
+* build distribution: `python -m build` (`pip install build`)
 * project venv: `cc_venv`, `test_cc_venv` (for local package installation tests)
 * install package in test venv: `pip install dist/pyconstclasses-0.1-py3-none-any.whl --force-reinstall`
+* test with coverage: `pytest -v constclasses/test/ --cov=constclasses --cov-report=xml --cov-report=html` or `tox`
+* format:
+    * `black .` or `python -m black .` (`--check`)
+    * `isort .` or `python -m isort .` (`--check`)
 
 <br />
 <br />

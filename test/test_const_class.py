@@ -1,9 +1,8 @@
 from itertools import product
 
 import pytest
-
-from ..src.ccerror import ArgumentError, ConstError
-from ..src.const_class import const_class
+from constclasses.ccerror import ArgumentError, ConstError
+from constclasses.const_class import const_class
 
 
 class ConstClassBase:

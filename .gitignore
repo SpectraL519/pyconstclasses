@@ -1,20 +1,18 @@
 # editor
 .vscode/
 
-# python virtual environment
-*venv*/
-
-# python cache
-**/__pycache__/
-**/.pytest_cache/
-
-# tox
-.tox/
-
 # build and distribution files
 build/
 dist/
-pyconstclasses.egg-info/
+src/pyconstclasses.egg-info/
+
+# python virtual environment
+*venv*/
+
+# python files
+.tox/
+.pytest_cache/
+**/__pycache__/
 
 # code coverage
 .coverage*

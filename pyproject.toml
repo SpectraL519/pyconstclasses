@@ -37,6 +37,16 @@ test = ["tox"]
 Repository = "https://github.com/SpectraL519/pyconstclasses.git"
 
 
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["constclasses"]
+
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["src"]
+
+
 [tool.black]
 line-length = 90
 target-version = ['py312']

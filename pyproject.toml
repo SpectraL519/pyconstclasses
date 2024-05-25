@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "pyconstclasses"
+version = "0.1"
+description = "Package with const class decoratos and utility"
+authors = [
+    {name = "SpectraL519"}
+]
+readme = {file = "README.md", content-type = "markdown"}
+license = {file = "LICENSE"}
+requires-python = ">= 3.9"
+keywords = ["const", "const class", "const classes"]
+classifiers = [
+  "Development Status :: 3 - Alpha", # 3 - Alpha, 5 - Production/Stable
+
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Decorators",
+
+  "License :: MIT License",
+
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = ["pre-commit"]
+test = ["tox"]
+
+[project.urls]
+Repository = "https://github.com/SpectraL519/pyconstclasses.git"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["constclasses"]
+
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["src"]
+
+
+[tool.black]
+line-length = 90
+target-version = ['py312']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.tox
+  | .*venv.*
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+py_version=312
+profile = "black"
+src_paths = ["constclasses"]
+skip = [
+  ".git",
+  ".tox",
+  "build",
+  "dist"
+]
+skip_glob = ["*venv*"]

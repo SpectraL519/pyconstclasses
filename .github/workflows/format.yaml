@@ -1,0 +1,31 @@
+name: format
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  check_format:
+    name: Check proper code formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install black isort
+
+      - name: Run format check
+        run: |
+          python -m black . --check
+
+      - name: Run import check
+        run: |
+          python -m isort . --check

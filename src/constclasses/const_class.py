@@ -1,16 +1,16 @@
-from .ccerror import ArgumentError, ConstError
+from .ccerror import ConstError, InitializationError
 
 
 def _const_class_impl(cls):
     class ConstClass(cls):
         def __init__(self, *args):
             if len(args) != len(cls.__annotations__):
-                raise ArgumentError(len(cls.__annotations__), len(args))
+                raise InitializationError.invalid_number_of_arguments_error(
+                    len(cls.__annotations__), len(args)
+                )
 
             for i, (attr_name, attr_type) in enumerate(cls.__annotations__.items()):
                 self.__dict__[attr_name] = attr_type(args[i])
-
-            super().__init__()
 
         def __setattr__(self, attr_name: str, _) -> None:
             raise ConstError(cls.__name__, attr_name)

@@ -1,19 +1,10 @@
-from .ccerror import ArgumentError, ConstError
+from .ccerror import ConstError, InitializationError
 
 
 def static_const_class(cls):
     class StaticConstClass(cls):
-        def __init__(self):
-            print(f"{cls.__annotations__ = }")
-
-            static_attributes = {
-                attribute: value
-                for attribute, value in vars(cls).items()
-                if not callable(value) and not attribute.startswith('__')
-            }
-            print(f"{static_attributes = }")
-
-            super().__init__()
+        def __init__(self, *args):
+            pass
 
         def __setattr__(self, attr_name: str, _) -> None:
             raise ConstError(cls.__name__, attr_name)
@@ -34,6 +25,11 @@ if __name__ == "__main__":
 
     print(f"{StaticResource.x = }")
     print(f"{StaticResource.s = }")
+
+    try:
+        instance = StaticResource()
+    except Exception as err:
+        print(f"Instantiation: {err}")
 
     try:
         StaticResource.x = 3

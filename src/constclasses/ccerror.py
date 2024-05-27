@@ -1,7 +1,12 @@
-class ArgumentError(Exception):
-    def __init__(self, nexpected, nactual):
-        message = f"Invalid number of arguments: expected {nexpected} - got {nactual}"
+class InitializationError(Exception):
+    def __init__(self, message):
         super().__init__(message)
+
+    @staticmethod
+    def invalid_number_of_arguments_error(nexpected: int, nactual: int):
+        return InitializationError(
+            f"Invalid number of arguments: expected {nexpected} - got {nactual}"
+        )
 
 
 class ConstError(Exception):

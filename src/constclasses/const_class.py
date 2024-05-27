@@ -2,8 +2,6 @@ from .ccerror import ArgumentError, ConstError
 
 
 def _const_class_impl(cls):
-    print(f"annotations: {cls.__annotations__}")
-
     class ConstClass(cls):
         def __init__(self, *args):
             if len(args) != len(cls.__annotations__):

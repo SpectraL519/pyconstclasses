@@ -8,10 +8,6 @@ class InitializationError(Exception):
             f"Invalid number of arguments: expected {nexpected} - got {nactual}"
         )
 
-    @staticmethod
-    def static_class_initialization(cls_name: str):
-        return InitializationError(f"Cannot create an instance of a static class `{cls_name}`")
-
 
 class ConstError(Exception):
     def __init__(self, cls_name: str, attribute: str):

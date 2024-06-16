@@ -3,9 +3,11 @@ from .ccerror import ConstError, InitializationError
 
 def _const_class_impl(cls):
     class ConstClass(cls):
-        def __init__(self, *args):
+        def __init__(self, *args, **kwargs):
+            super(ConstClass, self).__init__()
+
             if len(args) != len(cls.__annotations__):
-                raise InitializationError.invalid_number_of_arguments_error(
+                raise InitializationError.invalid_number_of_arguments(
                     len(cls.__annotations__), len(args)
                 )
 

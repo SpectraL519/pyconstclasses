@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - '*'
+    paths:
+      - src/
+      - test/
 
 jobs:
   check_format:

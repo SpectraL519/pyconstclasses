@@ -1,35 +1,30 @@
 import pytest
 from constclasses.ccerror import ConfigurationError
-from constclasses.const_class_base import MANDATORY_CONST_FIELDS, ConstClassBase
+from constclasses.const_class_base import MANDATORY_CONST_ATTRS, ConstClassBase
 
-from .utility import assert_does_not_throw
+import test.common.utility as util
 
 
 def test_const_class_base_setup_for_not_none_include_and_exclude_parameters():
     with pytest.raises(ConfigurationError) as err:
-        _ = ConstClassBase(include={""}, exclude={""})
+        _ = ConstClassBase(include={}, exclude={})
 
-    err_msg = str(err.value)
-    assert err_msg.endswith(
-        "`include` and `exclude` parameters cannot be used simultaneously"
-    )
+    assert util.msg(err).endswith(util.config_include_and_exclude_used_error_msg_postfix())
 
 
 def test_const_class_base_setup_for_exclude_intersecting_with_mandatory_const_fields():
-    config_err_msg = lambda attrs: f"attribute(s) [{', '.join(attrs)}] cannot be excluded"
-
-    for mandatory_const_field in MANDATORY_CONST_FIELDS:
+    for mandatory_const_attr in MANDATORY_CONST_ATTRS:
         with pytest.raises(ConfigurationError) as err:
-            _ = ConstClassBase(exclude={mandatory_const_field})
+            _ = ConstClassBase(exclude={mandatory_const_attr})
 
         err_msg = str(err.value)
-        assert err_msg.endswith(config_err_msg([mandatory_const_field]))
+        assert err_msg.endswith(util.config_invalid_exclude_error_msg([mandatory_const_attr]))
 
     with pytest.raises(ConfigurationError) as err:
-        _ = ConstClassBase(exclude=MANDATORY_CONST_FIELDS)
+        _ = ConstClassBase(exclude=MANDATORY_CONST_ATTRS)
 
     err_msg = str(err.value)
-    assert err_msg.endswith(config_err_msg(MANDATORY_CONST_FIELDS))
+    assert err_msg.endswith(util.config_invalid_exclude_error_msg(MANDATORY_CONST_ATTRS))
 
 
 @pytest.fixture
@@ -39,36 +34,36 @@ def gen_attributes():
     return no_attrs, attrs
 
 
-def test_is_const_field_with_default_include_and_exclude_parameters(gen_attributes):
-    no_attrs, attrs = gen_attributes
+def test_is_const_attribute_with_default_include_and_exclude_parameters(gen_attributes):
+    _, attrs = gen_attributes
     sut = ConstClassBase()
 
-    for attr in MANDATORY_CONST_FIELDS | set(attrs):
-        assert sut.is_const_field(attr)
+    for attr in MANDATORY_CONST_ATTRS | set(attrs):
+        assert sut.is_const_attribute(attr)
 
 
-def test_is_const_field_with_include_parameter(gen_attributes):
+def test_is_const_attribute_with_include_parameter(gen_attributes):
     no_attrs, attrs = gen_attributes
     include = attrs[: (no_attrs // 2)]
     sut = ConstClassBase(include=include)
 
-    for attr in MANDATORY_CONST_FIELDS | set(include):
-        assert sut.is_const_field(attr)
+    for attr in MANDATORY_CONST_ATTRS | set(include):
+        assert sut.is_const_attribute(attr)
 
     for attr in attrs[(no_attrs // 2) :]:
-        assert not sut.is_const_field(attr)
+        assert not sut.is_const_attribute(attr)
 
 
-def test_is_const_field_with_exclude_parameter(gen_attributes):
+def test_is_const_attribute_with_exclude_parameter(gen_attributes):
     no_attrs, attrs = gen_attributes
     exclude = attrs[: (no_attrs // 2)]
     sut = ConstClassBase(exclude=exclude)
 
     for attr in exclude:
-        assert not sut.is_const_field(attr)
+        assert not sut.is_const_attribute(attr)
 
-    for attr in MANDATORY_CONST_FIELDS | set(attrs[(no_attrs // 2) :]):
-        assert sut.is_const_field(attr)
+    for attr in MANDATORY_CONST_ATTRS | set(attrs[(no_attrs // 2) :]):
+        assert sut.is_const_attribute(attr)
 
 
 def test_process_attribute_type_without_strict_types():
@@ -115,10 +110,10 @@ def test_process_attribute_type_with_strict_types():
     attr_name = "x"
     attr_type = BaseClass
 
-    assert_does_not_throw(
+    util.assert_does_not_throw(
         lambda: sut.process_attribute_type(attr_name, attr_type, BaseClass())
     )
-    assert_does_not_throw(
+    util.assert_does_not_throw(
         lambda: sut.process_attribute_type(attr_name, attr_type, DerivedClass())
     )
 

@@ -1,5 +1,6 @@
 import pytest
 from constclasses.const_class_base import ConstClassBase
+
 from .utility import assert_does_not_throw
 
 
@@ -47,8 +48,12 @@ def test_process_attribute_type_with_strict_types():
     attr_name = "x"
     attr_type = BaseClass
 
-    assert_does_not_throw(lambda: sut.process_attribute_type(attr_name, attr_type, BaseClass()))
-    assert_does_not_throw(lambda: sut.process_attribute_type(attr_name, attr_type, DerivedClass()))
+    assert_does_not_throw(
+        lambda: sut.process_attribute_type(attr_name, attr_type, BaseClass())
+    )
+    assert_does_not_throw(
+        lambda: sut.process_attribute_type(attr_name, attr_type, DerivedClass())
+    )
 
     with pytest.raises(TypeError):
         sut.process_attribute_type(attr_name, attr_type, NotDerivedClass())

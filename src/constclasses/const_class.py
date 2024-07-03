@@ -7,7 +7,9 @@ def const_class_impl(cls, with_strict_types: bool):
         def __init__(self, *args, **kwargs):
             super(ConstClass, self).__init__()
 
-            self.__dict__["_cc_base"] = ConstClassBase(with_strict_types=with_strict_types)
+            self.__dict__["_cc_base"] = ConstClassBase(
+                with_strict_types=with_strict_types
+            )
 
             if len(args) != len(cls.__annotations__):
                 raise InitializationError.invalid_number_of_arguments(
@@ -15,7 +17,9 @@ def const_class_impl(cls, with_strict_types: bool):
                 )
 
             for i, (attr_name, attr_type) in enumerate(cls.__annotations__.items()):
-                self.__dict__[attr_name] = self._cc_base.process_attribute_type(attr_name, attr_type, args[i])
+                self.__dict__[attr_name] = self._cc_base.process_attribute_type(
+                    attr_name, attr_type, args[i]
+                )
 
         def __setattr__(self, attr_name: str, _) -> None:
             raise ConstError(cls.__name__, attr_name)

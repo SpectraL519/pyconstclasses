@@ -7,14 +7,14 @@ from .const_class_base import (
 )
 
 
-def static_const_class_impl(cls, with_strict_types: bool, include: set[str], exclude: set[str]):
+def static_const_class_impl(
+    cls, with_strict_types: bool, include: set[str], exclude: set[str]
+):
     class StaticConstClass(cls):
         def __init__(self, *args, **kwargs):
             super(StaticConstClass, self).__init__(*args, **kwargs)
             self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
-                with_strict_types=with_strict_types,
-                include=include,
-                exclude=exclude
+                with_strict_types=with_strict_types, include=include, exclude=exclude
             )
             self.__dict__[CC_INITIALIZED_ATTR_NAME] = False
 
@@ -50,7 +50,6 @@ def static_const_class(
         return static_const_class_impl(cls, with_strict_types, include, exclude)
 
     return _wrap if cls is None else _wrap(cls)
-
 
 
 def mutable_instance(static_const_cls_instance):

@@ -1,29 +1,24 @@
-import pytest
-from constclasses.ccerror import ConstError, InitializationError
-from constclasses.static_const_class import static_const_class, mutable_instance
-from constclasses.const_class_base import MANDATORY_CONST_ATTRS
-
 import test.common.utility as util
 
+import pytest
+from constclasses.ccerror import ConstError, InitializationError
+from constclasses.const_class_base import MANDATORY_CONST_ATTRS
+from constclasses.static_const_class import mutable_instance, static_const_class
 
 X_ATTR_NAME = "x"
 S_ATTR_NAME = "s"
 ATTR_NAMES = {X_ATTR_NAME, S_ATTR_NAME}
 
-ATTR_VALS_1 = {
-    X_ATTR_NAME: 1,
-    S_ATTR_NAME: "str1"
-}
-ATTR_VALS_2 = {
-    X_ATTR_NAME: 2,
-    S_ATTR_NAME: "str2"
-}
+ATTR_VALS_1 = {X_ATTR_NAME: 1, S_ATTR_NAME: "str1"}
+ATTR_VALS_2 = {X_ATTR_NAME: 2, S_ATTR_NAME: "str2"}
 DUMMY_VALUE = 3.14
+
 
 @static_const_class
 class StaticConstClass:
     x: int = ATTR_VALS_1[X_ATTR_NAME]
     s: str = ATTR_VALS_1[S_ATTR_NAME]
+
 
 STATIC_CONST_CLASS_NAME = "StaticConstClass"
 
@@ -48,7 +43,7 @@ def test_static_const_class_initialization_without_strict_types():
 
 
 def test_static_const_class_initialization_with_strict_types():
-    def _test(x_value = ATTR_VALS_1[X_ATTR_NAME], s_value = ATTR_VALS_1[S_ATTR_NAME]):
+    def _test(x_value=ATTR_VALS_1[X_ATTR_NAME], s_value=ATTR_VALS_1[S_ATTR_NAME]):
         @static_const_class(with_strict_types=True)
         class StaticConstClassNoStrictTypes:
             x: int = x_value
@@ -81,7 +76,9 @@ def test_mutable_instance_of_static_const_class():
     for attr_name in MANDATORY_CONST_ATTRS:
         with pytest.raises(ConstError) as err:
             setattr(mut_instance, attr_name, DUMMY_VALUE)
-        assert util.msg(err) == util.const_error_msg("mutable_StaticConstClass", attr_name)
+        assert util.msg(err) == util.const_error_msg(
+            "mutable_StaticConstClass", attr_name
+        )
 
 
 def test_static_const_class_member_modification_with_include_parameter():

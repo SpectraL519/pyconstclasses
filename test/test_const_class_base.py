@@ -1,15 +1,17 @@
+import test.common.utility as util
+
 import pytest
 from constclasses.ccerror import ConfigurationError
 from constclasses.const_class_base import MANDATORY_CONST_ATTRS, ConstClassBase
-
-import test.common.utility as util
 
 
 def test_const_class_base_setup_for_not_none_include_and_exclude_parameters():
     with pytest.raises(ConfigurationError) as err:
         _ = ConstClassBase(include={}, exclude={})
 
-    assert util.msg(err).endswith(util.config_include_and_exclude_used_error_msg_postfix())
+    assert util.msg(err).endswith(
+        util.config_include_and_exclude_used_error_msg_postfix()
+    )
 
 
 def test_const_class_base_setup_for_exclude_intersecting_with_mandatory_const_fields():
@@ -18,7 +20,9 @@ def test_const_class_base_setup_for_exclude_intersecting_with_mandatory_const_fi
             _ = ConstClassBase(exclude={mandatory_const_attr})
 
         err_msg = str(err.value)
-        assert err_msg.endswith(util.config_invalid_exclude_error_msg([mandatory_const_attr]))
+        assert err_msg.endswith(
+            util.config_invalid_exclude_error_msg([mandatory_const_attr])
+        )
 
     with pytest.raises(ConfigurationError) as err:
         _ = ConstClassBase(exclude=MANDATORY_CONST_ATTRS)

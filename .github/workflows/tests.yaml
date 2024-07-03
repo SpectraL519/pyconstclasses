@@ -4,8 +4,9 @@ on:
     branches:
       - '*'
     paths:
-      - src/
-      - test/
+      - src/**
+      - test/**
+      - tox.ini
 
 jobs:
   run_tests:

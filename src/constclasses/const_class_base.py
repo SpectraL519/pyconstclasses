@@ -51,4 +51,5 @@ class ConstClassBase:
 
             return attr_value
 
-        return attr_type(attr_value)
+        # None check required for _cc_* members which are not annotated
+        return attr_type(attr_value) if attr_type is not None else attr_value

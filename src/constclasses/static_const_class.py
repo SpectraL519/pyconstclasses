@@ -7,12 +7,14 @@ from .const_class_base import (
 )
 
 
-def static_const_class_impl(cls, /, *, with_strict_types: bool = False):
+def static_const_class_impl(cls, with_strict_types: bool, include: set[str], exclude: set[str]):
     class StaticConstClass(cls):
         def __init__(self, *args, **kwargs):
             super(StaticConstClass, self).__init__(*args, **kwargs)
             self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
-                with_strict_types=with_strict_types
+                with_strict_types=with_strict_types,
+                include=include,
+                exclude=exclude
             )
             self.__dict__[CC_INITIALIZED_ATTR_NAME] = False
 
@@ -20,7 +22,7 @@ def static_const_class_impl(cls, /, *, with_strict_types: bool = False):
             if self._cc_initialized and self._cc_base.is_const_attribute(attr_name):
                 raise ConstError(cls.__name__, attr_name)
             self.__dict__[attr_name] = self._cc_base.process_attribute_type(
-                attr_name, attr_type, attr_value
+                attr_name, cls.__annotations__.get(attr_name), attr_value
             )
 
     StaticConstClass.__name__ = cls.__name__
@@ -29,7 +31,7 @@ def static_const_class_impl(cls, /, *, with_strict_types: bool = False):
 
     cls_vars = vars(cls)
     instance = StaticConstClass()
-    for attr_name, attr_type in StaticConstClass.__annotations__.items():
+    for attr_name in cls.__annotations__.keys():
         setattr(instance, attr_name, cls_vars[attr_name])
     instance._cc_initialized = True
 
@@ -45,7 +47,7 @@ def static_const_class(
     exclude: set[str] = None,
 ):
     def _wrap(cls):
-        return static_const_class_impl(cls, with_strict_types=with_strict_types)
+        return static_const_class_impl(cls, with_strict_types, include, exclude)
 
     return _wrap if cls is None else _wrap(cls)
 
@@ -53,7 +55,7 @@ def static_const_class(
 
 def mutable_instance(static_const_cls_instance):
     static_const_cls = static_const_cls_instance.__class__
-    print(static_const_cls_instance.__dict__)
+    mutable_cls_name = f"mutable_{static_const_cls.__name__}"
 
     class MutableClass(static_const_cls):
         def __init__(self, *args, **kwargs):
@@ -64,10 +66,10 @@ def mutable_instance(static_const_cls_instance):
 
         def __setattr__(self, attr_name, value):
             if attr_name in MANDATORY_CONST_ATTRS:
-                raise ConstError()
+                raise ConstError(attr_name, mutable_cls_name)
             self.__dict__[attr_name] = value
 
-    MutableClass.__name__ = f"mutable_{static_const_cls.__name__}"
+    MutableClass.__name__ = mutable_cls_name
     MutableClass.__module__ = static_const_cls.__module__
 
     return MutableClass()

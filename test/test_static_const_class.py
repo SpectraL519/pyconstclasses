@@ -78,48 +78,47 @@ def test_mutable_instance_of_static_const_class():
         setattr(mut_instance, attr_name, ATTR_VALS_2[attr_name])
         assert getattr(mut_instance, attr_name) == ATTR_VALS_2[attr_name]
 
-
-# def test_static_const_class_member_modification_with_include_parameter():
-#     include = {X_ATTR_NAME}
-
-#     @static_const_class(include=include)
-#     class ConstClassInclude:
-#         x: int
-#         s: str
-
-#     const_instance = ConstClassInclude(**ATTR_VALS_1)
-#     dummy_value = 3
-
-#     # mandatory const attributes can never be modified
-#     for attr_name in MANDATORY_CONST_ATTRS | include:
-#         with pytest.raises(ConstError) as err:
-#             setattr(const_instance, attr_name, dummy_value)
-#         assert msg(err) == const_error_msg(attr_name, ConstClassInclude.__name__)
-
-#     def _modify_not_const_memeber():
-#         const_instance.s = ATTR_VALS_2[S_ATTR_NAME]
-
-#     assert_does_not_throw(_modify_not_const_memeber)
-#     assert const_instance.s == ATTR_VALS_2[S_ATTR_NAME]
+    for attr_name in MANDATORY_CONST_ATTRS:
+        with pytest.raises(ConstError) as err:
+            setattr(mut_instance, attr_name, DUMMY_VALUE)
+        assert util.msg(err) == util.const_error_msg("mutable_StaticConstClass", attr_name)
 
 
-# def test_static_const_class_member_modification_with_exclude_parameter():
-#     @const_class(exclude={X_ATTR_NAME})
-#     class ConstClassInclude:
-#         x: int
-#         s: str
+def test_static_const_class_member_modification_with_include_parameter():
+    include = {X_ATTR_NAME}
 
-#     const_instance = ConstClassInclude(X1, S1)
-#     dummy_value = 3
+    @static_const_class(include=include)
+    class StaticConstClassInclude:
+        x: int = ATTR_VALS_1[X_ATTR_NAME]
+        s: str = ATTR_VALS_1[X_ATTR_NAME]
 
-#     # mandatory const attributes can never be modified
-#     for attr_name in MANDATORY_CONST_ATTRS | {S_ATTR_NAME}:
-#         with pytest.raises(ConstError) as err:
-#             setattr(const_instance, attr_name, dummy_value)
-#         assert msg(err) == const_error_msg(attr_name, ConstClassInclude.__name__)
+    # mandatory const attributes can never be modified
+    for attr_name in MANDATORY_CONST_ATTRS | include:
+        with pytest.raises(ConstError) as err:
+            setattr(StaticConstClassInclude, attr_name, DUMMY_VALUE)
+        assert util.msg(err) == util.const_error_msg(attr_name, "StaticConstClassInclude")
 
-#     def _modify_not_const_memeber():
-#         const_instance.x = X2
+    def _modify_not_const_memeber():
+        StaticConstClassInclude.s = ATTR_VALS_2[S_ATTR_NAME]
 
-#     assert_does_not_throw(_modify_not_const_memeber)
-#     assert const_instance.x == X2
+    util.assert_does_not_throw(_modify_not_const_memeber)
+    assert StaticConstClassInclude.s == ATTR_VALS_2[S_ATTR_NAME]
+
+
+def test_static_const_class_member_modification_with_exclude_parameter():
+    @static_const_class(exclude={X_ATTR_NAME})
+    class StaticConstClassExclude:
+        x: int = ATTR_VALS_1[X_ATTR_NAME]
+        s: str = ATTR_VALS_1[X_ATTR_NAME]
+
+    # mandatory const attributes can never be modified
+    for attr_name in MANDATORY_CONST_ATTRS | {S_ATTR_NAME}:
+        with pytest.raises(ConstError) as err:
+            setattr(StaticConstClassExclude, attr_name, DUMMY_VALUE)
+        assert util.msg(err) == util.const_error_msg(attr_name, "StaticConstClassExclude")
+
+    def _modify_not_const_memeber():
+        StaticConstClassExclude.x = ATTR_VALS_2[X_ATTR_NAME]
+
+    util.assert_does_not_throw(_modify_not_const_memeber)
+    assert StaticConstClassExclude.x == ATTR_VALS_2[X_ATTR_NAME]

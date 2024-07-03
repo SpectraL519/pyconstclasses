@@ -78,7 +78,6 @@ def test_const_class_member_modification():
 
 def test_const_class_member_modification_with_include_parameter():
     include = {X_ATTR_NAME}
-
     @const_class(include=include)
     class ConstClassInclude:
         x: int

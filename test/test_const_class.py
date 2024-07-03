@@ -1,12 +1,7 @@
 import pytest
 from constclasses.ccerror import ConstError, InitializationError
-from constclasses.const_class import const_class
 
-
-@const_class
-class ConstClass:
-    x: int
-    s: str
+from .common import S1, S2, X1, X2, ConstClass
 
 
 @pytest.mark.parametrize(
@@ -22,23 +17,20 @@ def test_const_class_initialization_with_invalid_number_of_arguments(init_args: 
 
 
 def test_const_class_member_modification():
-    x1, s1 = 1, "str1"
-    x2, s2 = 2, "str2"
-
-    const_instance = ConstClass(x1, s1)
-
-    with pytest.raises(ConstError) as err:
-        const_instance.x = x2
-
     build_err_msg = (
         lambda member: f"Cannot modify const attribute `{member}` of class `{ConstClass.__name__}`"
     )
+
+    const_instance = ConstClass(X1, S1)
+
+    with pytest.raises(ConstError) as err:
+        const_instance.x = X2
 
     err_msg = str(err.value)
     assert err_msg == build_err_msg("x")
 
     with pytest.raises(ConstError) as err:
-        const_instance.s = s2
+        const_instance.s = S2
 
     err_msg = str(err.value)
     assert err_msg == build_err_msg("s")

@@ -1,6 +1,6 @@
 import pytest
-from constclasses.const_class_base import ConstClassBase, MANDATORY_CONST_FIELDS
 from constclasses.ccerror import ConfigurationError
+from constclasses.const_class_base import MANDATORY_CONST_FIELDS, ConstClassBase
 
 from .utility import assert_does_not_throw
 
@@ -10,7 +10,9 @@ def test_const_class_base_setup_for_not_none_include_and_exclude_parameters():
         _ = ConstClassBase(include={""}, exclude={""})
 
     err_msg = str(err.value)
-    assert err_msg.endswith("`include` and `exclude` parameters cannot be used simultaneously")
+    assert err_msg.endswith(
+        "`include` and `exclude` parameters cannot be used simultaneously"
+    )
 
 
 def test_const_class_base_setup_for_exclude_intersecting_with_mandatory_const_fields():
@@ -34,13 +36,13 @@ def test_is_const_field_with_include_parameter():
     no_attrs = 8
     attrs = [f"attr{i+1}" for i in range(no_attrs)]
 
-    include = attrs[:(no_attrs // 2)]
+    include = attrs[: (no_attrs // 2)]
     sut = ConstClassBase(include=include)
 
     for attr in MANDATORY_CONST_FIELDS | set(include):
         assert sut.is_const_field(attr)
 
-    for attr in attrs[(no_attrs // 2):]:
+    for attr in attrs[(no_attrs // 2) :]:
         assert not sut.is_const_field(attr)
 
 
@@ -48,13 +50,13 @@ def test_is_const_field_with_exclude_parameter():
     no_attrs = 8
     attrs = [f"attr{i+1}" for i in range(no_attrs)]
 
-    exclude = attrs[:(no_attrs // 2)]
+    exclude = attrs[: (no_attrs // 2)]
     sut = ConstClassBase(exclude=exclude)
 
     for attr in exclude:
         assert not sut.is_const_field(attr)
 
-    for attr in MANDATORY_CONST_FIELDS | set(attrs[(no_attrs // 2):]):
+    for attr in MANDATORY_CONST_FIELDS | set(attrs[(no_attrs // 2) :]):
         assert sut.is_const_field(attr)
 
 

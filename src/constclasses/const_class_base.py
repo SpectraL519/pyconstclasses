@@ -1,6 +1,5 @@
 from .ccerror import ConfigurationError
 
-
 CC_BASE_ATTR_NAME = "_cc_base"
 CC_INITIALIZED_ATTR_NAME = "_cc_initialized"
 MANDATORY_CONST_FIELDS = {CC_BASE_ATTR_NAME, CC_INITIALIZED_ATTR_NAME}
@@ -16,7 +15,9 @@ class ConstClassBase:
         with_strict_types: bool = False,
     ):
         if include is not None and exclude is not None:
-            raise ConfigurationError("`include` and `exclude` parameters cannot be used simultaneously")
+            raise ConfigurationError(
+                "`include` and `exclude` parameters cannot be used simultaneously"
+            )
 
         if include is not None and not isinstance(include, set):
             include = set(include)
@@ -27,14 +28,22 @@ class ConstClassBase:
 
             intersection = exclude & MANDATORY_CONST_FIELDS
             if intersection:
-                raise ConfigurationError(f"attribute(s) [{', '.join(intersection)}] cannot be excluded")
+                raise ConfigurationError(
+                    f"attribute(s) [{', '.join(intersection)}] cannot be excluded"
+                )
 
-        self._const_fields = MANDATORY_CONST_FIELDS if include is None else MANDATORY_CONST_FIELDS | include
+        self._const_fields = (
+            MANDATORY_CONST_FIELDS
+            if include is None
+            else MANDATORY_CONST_FIELDS | include
+        )
         self._mutable_fields = exclude
         self._with_strict_types = with_strict_types
 
     def is_const_field(self, attr_name: str):
-        return attr_name in self._const_fields or (self._mutable_fields and attr_name not in self._mutable_fields)
+        return attr_name in self._const_fields or (
+            self._mutable_fields and attr_name not in self._mutable_fields
+        )
 
     def process_attribute_type(self, attr_name, attr_type, attr_value):
         if self._with_strict_types:

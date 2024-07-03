@@ -1,7 +1,7 @@
 import pytest
 from constclasses.ccerror import ConstError, InitializationError
 
-from .common import S1, S2, X1, X2, ConstClass, X_ATTR_NAME, S_ATTR_NAME
+from .common import S1, S2, S_ATTR_NAME, X1, X2, X_ATTR_NAME, ConstClass
 
 
 @pytest.mark.parametrize(

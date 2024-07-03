@@ -1,7 +1,6 @@
 from constclasses.const_class import const_class
 from constclasses.static_const_class import static_const_class
 
-
 X1, S1 = 1, "str1"
 X2, S2 = 2, "str2"
 

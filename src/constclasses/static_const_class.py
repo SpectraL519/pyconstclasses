@@ -1,5 +1,9 @@
 from .ccerror import ConstError
-from .const_class_base import ConstClassBase, CC_BASE_ATTR_NAME, CC_INITIALIZED_ATTR_NAME
+from .const_class_base import (
+    CC_BASE_ATTR_NAME,
+    CC_INITIALIZED_ATTR_NAME,
+    ConstClassBase,
+)
 
 
 def static_const_class(cls, /, *, with_strict_types: bool = False):

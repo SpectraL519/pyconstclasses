@@ -4,8 +4,9 @@ on:
     branches:
       - '*'
     paths:
-      - src/
-      - test/
+      - src/**
+      - test/**
+      - pyproject.toml
 
 jobs:
   check_format:

@@ -33,7 +33,7 @@
 * install requirements: `pip install -r requirements-dev.txt`
 * build distribution: `python -m build` (`pip install build`)
 * project venv: `cc_venv`, `test_cc_venv` (for local package installation tests)
-* install package in test venv: `pip install dist/pyconstclasses-0.1-py3-none-any.whl --force-reinstall`
+* install package in test venv: `pip install dist/pyconstclasses-<version>-py3-none-any.whl --force-reinstall`
 * test with coverage: `pytest -v constclasses/test/ --cov=constclasses --cov-report=xml --cov-report=html` or `tox`
 * format:
     * `black .` or `python -m black .` (`--check`)

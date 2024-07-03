@@ -4,8 +4,8 @@ on:
     branches:
       - '*'
     paths:
-      - src/
-      - test/
+      - src/**
+      - test/**
 
 jobs:
   run_tests:

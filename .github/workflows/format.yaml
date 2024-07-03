@@ -4,8 +4,8 @@ on:
     branches:
       - '*'
     paths:
-      - src/
-      - test/
+      - src/**
+      - test/**
 
 jobs:
   check_format:

@@ -1,11 +1,13 @@
 from .ccerror import ConstError
+from .const_class_base import ConstClassBase
 
 
-def static_const_class(cls):
+def static_const_class(cls, /, *, with_strict_types: bool = False):
     class StaticConstClass(cls):
         def __init__(self, *args, **kwargs):
-            self.__dict__["_cc_initialized"] = False
             super(StaticConstClass, self).__init__(*args, **kwargs)
+            self.__dict__["_cc_initialized"] = False
+            self.__dict__["_cc_base"] = ConstClassBase(with_strict_types=with_strict_types)
 
         def __setattr__(self, attr_name: str, value) -> None:
             if self._cc_initialized:
@@ -19,7 +21,7 @@ def static_const_class(cls):
     cls_vars = vars(cls)
     instance = StaticConstClass()
     for attr_name, attr_type in StaticConstClass.__annotations__.items():
-        setattr(instance, attr_name, attr_type(cls_vars[attr_name]))
+        setattr(instance, attr_name, instance._cc_base.process_attribute_type(attr_name, attr_type, cls_vars[attr_name]))
     instance._cc_initialized = True
 
     return instance

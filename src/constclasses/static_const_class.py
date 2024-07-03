@@ -4,11 +4,11 @@ from .ccerror import ConstError
 def static_const_class(cls):
     class StaticConstClass(cls):
         def __init__(self, *args, **kwargs):
-            self.__dict__["_initialized"] = False
+            self.__dict__["_cc_initialized"] = False
             super(StaticConstClass, self).__init__(*args, **kwargs)
 
         def __setattr__(self, attr_name: str, value) -> None:
-            if self._initialized:
+            if self._cc_initialized:
                 raise ConstError(cls.__name__, attr_name)
             self.__dict__[attr_name] = value
 
@@ -20,7 +20,7 @@ def static_const_class(cls):
     instance = StaticConstClass()
     for attr_name, attr_type in StaticConstClass.__annotations__.items():
         setattr(instance, attr_name, attr_type(cls_vars[attr_name]))
-    instance._initialized = True
+    instance._cc_initialized = True
 
     return instance
 

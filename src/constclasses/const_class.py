@@ -1,5 +1,5 @@
 from .ccerror import ConstError, InitializationError
-from .const_class_base import ConstClassBase
+from .const_class_base import ConstClassBase, CC_BASE_ATTR_NAME
 
 
 def const_class_impl(cls, with_strict_types: bool):
@@ -7,7 +7,7 @@ def const_class_impl(cls, with_strict_types: bool):
         def __init__(self, *args, **kwargs):
             super(ConstClass, self).__init__()
 
-            self.__dict__["_cc_base"] = ConstClassBase(
+            self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
                 with_strict_types=with_strict_types
             )
 

@@ -1,15 +1,15 @@
 from .ccerror import ConstError
-from .const_class_base import ConstClassBase
+from .const_class_base import ConstClassBase, CC_BASE_ATTR_NAME, CC_INITIALIZED_ATTR_NAME
 
 
 def static_const_class(cls, /, *, with_strict_types: bool = False):
     class StaticConstClass(cls):
         def __init__(self, *args, **kwargs):
             super(StaticConstClass, self).__init__(*args, **kwargs)
-            self.__dict__["_cc_initialized"] = False
-            self.__dict__["_cc_base"] = ConstClassBase(
+            self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
                 with_strict_types=with_strict_types
             )
+            self.__dict__[CC_INITIALIZED_ATTR_NAME] = False
 
         def __setattr__(self, attr_name: str, value) -> None:
             if self._cc_initialized:

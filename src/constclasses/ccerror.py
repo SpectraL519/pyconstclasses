@@ -1,5 +1,10 @@
+class ConfigurationError(Exception):
+    def __init__(self, message: str):
+        super().__init__(f"Invalid const class configuration: {message}")
+
+
 class InitializationError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         super().__init__(message)
 
     @staticmethod

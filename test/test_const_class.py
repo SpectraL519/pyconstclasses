@@ -1,7 +1,7 @@
 import pytest
 from constclasses.ccerror import ConstError, InitializationError
 
-from .common import S1, S2, X1, X2, ConstClass
+from .common import S1, S2, X1, X2, ConstClass, X_ATTR_NAME, S_ATTR_NAME
 
 
 @pytest.mark.parametrize(
@@ -27,10 +27,10 @@ def test_const_class_member_modification():
         const_instance.x = X2
 
     err_msg = str(err.value)
-    assert err_msg == build_err_msg("x")
+    assert err_msg == build_err_msg(X_ATTR_NAME)
 
     with pytest.raises(ConstError) as err:
         const_instance.s = S2
 
     err_msg = str(err.value)
-    assert err_msg == build_err_msg("s")
+    assert err_msg == build_err_msg(S_ATTR_NAME)

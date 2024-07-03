@@ -24,7 +24,9 @@ def const_class_impl(cls, with_strict_types: bool, include: set[str], exclude: s
         def __setattr__(self, attr_name: str, attr_value) -> None:
             if self._cc_base.is_const_attribute(attr_name):
                 raise ConstError(cls.__name__, attr_name)
-            self.__dict__[attr_name] = attr_value
+            self.__dict__[attr_name] = self._cc_base.process_attribute_type(
+                attr_name, cls.__annotations__.get(attr_name), attr_value
+            )
 
     ConstClass.__name__ = cls.__name__
     ConstClass.__module__ = cls.__module__

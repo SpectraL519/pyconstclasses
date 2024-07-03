@@ -23,42 +23,13 @@ class StaticConstClass:
 STATIC_CONST_CLASS_NAME = "StaticConstClass"
 
 
-def test_static_const_class_initialization_error():
+def test_initialization_error():
     with pytest.raises(TypeError) as err:
         _ = StaticConstClass(*(ATTR_VALS_2.values()))
     assert util.msg(err) == "'StaticConstClass' object is not callable"
 
 
-def test_static_const_class_initialization_without_strict_types():
-    def _test():
-        @static_const_class(with_strict_types=False)
-        class StaticConstClassNoStrictTypes:
-            x: int = DUMMY_VALUE
-            s: str = DUMMY_VALUE
-
-        assert StaticConstClassNoStrictTypes.x == int(DUMMY_VALUE)
-        assert StaticConstClassNoStrictTypes.s == str(DUMMY_VALUE)
-
-    util.assert_does_not_throw(_test)
-
-
-def test_static_const_class_initialization_with_strict_types():
-    def _test(x_value=ATTR_VALS_1[X_ATTR_NAME], s_value=ATTR_VALS_1[S_ATTR_NAME]):
-        @static_const_class(with_strict_types=True)
-        class StaticConstClassNoStrictTypes:
-            x: int = x_value
-            s: str = s_value
-
-    with pytest.raises(TypeError) as err:
-        _test(x_value=DUMMY_VALUE)
-    assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())
-
-    with pytest.raises(TypeError) as err:
-        _test(s_value=DUMMY_VALUE)
-    assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())
-
-
-def test_static_const_class_member_modification():
+def test_member_modification():
     for attr_name in ATTR_NAMES:
         with pytest.raises(ConstError) as err:
             setattr(StaticConstClass, attr_name, DUMMY_VALUE)
@@ -81,7 +52,7 @@ def test_mutable_instance_of_static_const_class():
         )
 
 
-def test_static_const_class_member_modification_with_include_parameter():
+def test_member_modification_with_include_parameter():
     include = {X_ATTR_NAME}
 
     @static_const_class(include=include)
@@ -102,7 +73,7 @@ def test_static_const_class_member_modification_with_include_parameter():
     assert StaticConstClassInclude.s == ATTR_VALS_2[S_ATTR_NAME]
 
 
-def test_static_const_class_member_modification_with_exclude_parameter():
+def test_member_modification_with_exclude_parameter():
     @static_const_class(exclude={X_ATTR_NAME})
     class StaticConstClassExclude:
         x: int = ATTR_VALS_1[X_ATTR_NAME]
@@ -119,3 +90,49 @@ def test_static_const_class_member_modification_with_exclude_parameter():
 
     util.assert_does_not_throw(_modify_not_const_memeber)
     assert StaticConstClassExclude.x == ATTR_VALS_2[X_ATTR_NAME]
+
+
+def test_initialization_without_strict_types():
+    def _test():
+        @static_const_class(with_strict_types=False)
+        class StaticConstClassNoStrictTypes:
+            x: int = DUMMY_VALUE
+            s: str = DUMMY_VALUE
+
+        assert StaticConstClassNoStrictTypes.x == int(DUMMY_VALUE)
+        assert StaticConstClassNoStrictTypes.s == str(DUMMY_VALUE)
+
+    util.assert_does_not_throw(_test)
+
+
+def test_initialization_with_strict_types():
+    def _test(x_value=ATTR_VALS_1[X_ATTR_NAME], s_value=ATTR_VALS_1[S_ATTR_NAME]):
+        @static_const_class(with_strict_types=True)
+        class StaticConstClassNoStrictTypes:
+            x: int = x_value
+            s: str = s_value
+
+    with pytest.raises(TypeError) as err:
+        _test(x_value=DUMMY_VALUE)
+    assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())
+
+    with pytest.raises(TypeError) as err:
+        _test(s_value=DUMMY_VALUE)
+    assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())
+
+
+def test_member_modification_with_strict_types():
+    """
+    To test the with_strict_types parameter for member modification
+    all members will be marked as not const.
+    """
+
+    @static_const_class(with_strict_types=True, exclude=ATTR_NAMES)
+    class StaticConstClassStrictTypes:
+        x: int = ATTR_VALS_1[X_ATTR_NAME]
+        s: str = ATTR_VALS_1[S_ATTR_NAME]
+
+    for attr_name in ATTR_NAMES:
+        with pytest.raises(TypeError) as err:
+            setattr(StaticConstClassStrictTypes, attr_name, DUMMY_VALUE)
+        assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())

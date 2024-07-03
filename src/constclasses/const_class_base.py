@@ -42,6 +42,9 @@ class ConstClassBase:
         return attr_name not in self._mutable_attrs
 
     def process_attribute_type(self, attr_name, attr_type, attr_value):
+        if attr_type is None and MANDATORY_CONST_ATTRS:
+            return attr_value
+
         if self._with_strict_types:
             if not isinstance(attr_value, attr_type):
                 raise TypeError(
@@ -51,5 +54,4 @@ class ConstClassBase:
 
             return attr_value
 
-        # None check required for _cc_* members which are not annotated
-        return attr_type(attr_value) if attr_type is not None else attr_value
+        return attr_type(attr_value)

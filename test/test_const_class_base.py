@@ -16,26 +16,39 @@ def test_const_class_base_setup_for_not_none_include_and_exclude_parameters():
 
 
 def test_const_class_base_setup_for_exclude_intersecting_with_mandatory_const_fields():
-    build_err_msg = lambda attrs: f"attribute(s) [{', '.join(attrs)}] cannot be excluded"
+    config_err_msg = lambda attrs: f"attribute(s) [{', '.join(attrs)}] cannot be excluded"
 
     for mandatory_const_field in MANDATORY_CONST_FIELDS:
         with pytest.raises(ConfigurationError) as err:
             _ = ConstClassBase(exclude={mandatory_const_field})
 
         err_msg = str(err.value)
-        assert err_msg.endswith(build_err_msg([mandatory_const_field]))
+        assert err_msg.endswith(config_err_msg([mandatory_const_field]))
 
     with pytest.raises(ConfigurationError) as err:
         _ = ConstClassBase(exclude=MANDATORY_CONST_FIELDS)
 
     err_msg = str(err.value)
-    assert err_msg.endswith(build_err_msg(MANDATORY_CONST_FIELDS))
+    assert err_msg.endswith(config_err_msg(MANDATORY_CONST_FIELDS))
 
 
-def test_is_const_field_with_include_parameter():
+@pytest.fixture
+def gen_attributes():
     no_attrs = 8
     attrs = [f"attr{i+1}" for i in range(no_attrs)]
+    return no_attrs, attrs
 
+
+def test_is_const_field_with_default_include_and_exclude_parameters(gen_attributes):
+    no_attrs, attrs = gen_attributes
+    sut = ConstClassBase()
+
+    for attr in MANDATORY_CONST_FIELDS | set(attrs):
+        assert sut.is_const_field(attr)
+
+
+def test_is_const_field_with_include_parameter(gen_attributes):
+    no_attrs, attrs = gen_attributes
     include = attrs[: (no_attrs // 2)]
     sut = ConstClassBase(include=include)
 
@@ -46,10 +59,8 @@ def test_is_const_field_with_include_parameter():
         assert not sut.is_const_field(attr)
 
 
-def test_is_const_field_with_exclude_parameter():
-    no_attrs = 8
-    attrs = [f"attr{i+1}" for i in range(no_attrs)]
-
+def test_is_const_field_with_exclude_parameter(gen_attributes):
+    no_attrs, attrs = gen_attributes
     exclude = attrs[: (no_attrs // 2)]
     sut = ConstClassBase(exclude=exclude)
 

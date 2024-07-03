@@ -18,3 +18,6 @@ class ConstClass:
 class StaticConstClass:
     x: int = X1
     s: str = S1
+
+
+STATIC_CONST_CLASS_NAME = "StaticConstClass"

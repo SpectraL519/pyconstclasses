@@ -32,18 +32,14 @@ class ConstClassBase:
                     f"attribute(s) [{', '.join(intersection)}] cannot be excluded"
                 )
 
-        self._const_fields = (
-            MANDATORY_CONST_FIELDS
-            if include is None
-            else MANDATORY_CONST_FIELDS | include
-        )
+        self._const_fields = None if include is None else MANDATORY_CONST_FIELDS | include
         self._mutable_fields = exclude
         self._with_strict_types = with_strict_types
 
     def is_const_field(self, attr_name: str):
-        return attr_name in self._const_fields or (
-            self._mutable_fields and attr_name not in self._mutable_fields
-        )
+        if self._mutable_fields is None:
+            return self._const_fields is None or attr_name in self._const_fields
+        return attr_name not in self._mutable_fields
 
     def process_attribute_type(self, attr_name, attr_type, attr_value):
         if self._with_strict_types:

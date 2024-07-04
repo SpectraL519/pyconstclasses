@@ -30,6 +30,44 @@ def test_initialization_with_invalid_number_of_arguments(init_args: list):
     assert util.msg(err).startswith("Invalid number of arguments")
 
 
+def test_initialization_with_args():
+    @const_class(with_kwargs=False)
+    class ConstClassArgs:
+        x: int
+        s: str
+
+    with pytest.raises(InitializationError):
+        _ = ConstClassArgs()
+
+    const_instance = None
+    def _test_args():
+        nonlocal const_instance
+        const_instance = ConstClassArgs(*(ATTR_VALS_1.values()))
+
+    util.assert_does_not_throw(_test_args)
+    for attr_name, attr_value in ATTR_VALS_1.items():
+        assert getattr(const_instance, attr_name) == attr_value
+
+
+def test_initialization_with_kwargs():
+    @const_class(with_kwargs=True)
+    class ConstClassKwargs:
+        x: int
+        s: str
+
+    with pytest.raises(TypeError):
+        _ = ConstClassKwargs(*(ATTR_VALS_1.values()))
+
+    const_instance = None
+    def _test_kwargs():
+        nonlocal const_instance
+        const_instance = ConstClassKwargs(**ATTR_VALS_1)
+
+    util.assert_does_not_throw(_test_kwargs)
+    for attr_name, attr_value in ATTR_VALS_1.items():
+        assert getattr(const_instance, attr_name) == attr_value
+
+
 def test_member_modification():
     const_instance = ConstClass(*(ATTR_VALS_1.values()))
 

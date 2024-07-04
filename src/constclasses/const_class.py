@@ -14,7 +14,7 @@ def const_class_impl(
             )
 
             if with_kwargs:
-                for i, (attr_name, attr_type) in enumerate(cls.__annotations__.items()):
+                for attr_name, attr_type in cls.__annotations__.items():
                     self.__dict__[attr_name] = self._cc_base.process_attribute_type(
                         attr_name, attr_type, kwargs.get(attr_name)
                     )

@@ -40,6 +40,7 @@ def test_initialization_with_args():
         _ = ConstClassArgs()
 
     const_instance = None
+
     def _test_args():
         nonlocal const_instance
         const_instance = ConstClassArgs(*(ATTR_VALS_1.values()))
@@ -59,6 +60,7 @@ def test_initialization_with_kwargs():
         _ = ConstClassKwargs(*(ATTR_VALS_1.values()))
 
     const_instance = None
+
     def _test_kwargs():
         nonlocal const_instance
         const_instance = ConstClassKwargs(**ATTR_VALS_1)

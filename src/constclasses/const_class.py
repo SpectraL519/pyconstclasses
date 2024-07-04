@@ -2,7 +2,9 @@ from .ccerror import ConstError, InitializationError
 from .const_class_base import CC_BASE_ATTR_NAME, ConstClassBase
 
 
-def const_class_impl(cls, with_kwargs: bool, with_strict_types: bool, include: set[str], exclude: set[str]):
+def const_class_impl(
+    cls, with_kwargs: bool, with_strict_types: bool, include: set[str], exclude: set[str]
+):
     class ConstClass(cls):
         def __init__(self, *args, **kwargs):
             super(ConstClass, self).__init__()

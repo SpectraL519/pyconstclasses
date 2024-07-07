@@ -4,8 +4,21 @@ import pytest
 from constclasses.ccerror import ConfigurationError
 from constclasses.const_class_base import MANDATORY_CONST_ATTRS, ConstClassBase
 
+# TODO: add test cases for valid configuration
 
-def test_const_class_base_setup_for_not_none_include_and_exclude_parameters():
+
+def test_setup_for_class_attrs_intersecting_with_mandatory_const_attrs():
+    for attr_name in MANDATORY_CONST_ATTRS:
+        with pytest.raises(ConfigurationError) as err:
+            _ = ConstClassBase(cls_attrs={attr_name})
+        assert util.config_not_empty_cls_attrs_intersection_msg_prefix() in util.msg(err)
+
+    with pytest.raises(ConfigurationError) as err:
+        _ = ConstClassBase(cls_attrs=MANDATORY_CONST_ATTRS)
+    assert util.config_not_empty_cls_attrs_intersection_msg_prefix() in util.msg(err)
+
+
+def test_setup_for_not_none_include_and_exclude_parameters():
     with pytest.raises(ConfigurationError) as err:
         _ = ConstClassBase(include={}, exclude={})
 
@@ -14,7 +27,7 @@ def test_const_class_base_setup_for_not_none_include_and_exclude_parameters():
     )
 
 
-def test_const_class_base_setup_for_exclude_intersecting_with_mandatory_const_fields():
+def test_setup_for_exclude_intersecting_with_mandatory_const_fields():
     for mandatory_const_attr in MANDATORY_CONST_ATTRS:
         with pytest.raises(ConfigurationError) as err:
             _ = ConstClassBase(exclude={mandatory_const_attr})

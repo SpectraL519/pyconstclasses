@@ -12,10 +12,10 @@ def static_const_class_impl(
 ):
     class StaticConstClass(cls):
         def __init__(self, *args, **kwargs):
-            super(StaticConstClass, self).__init__(*args, **kwargs)
             self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
                 with_strict_types=with_strict_types, include=include, exclude=exclude
             )
+            super(StaticConstClass, self).__init__()
             self.__dict__[CC_INITIALIZED_ATTR_NAME] = False
 
         def __setattr__(self, attr_name: str, attr_value) -> None:

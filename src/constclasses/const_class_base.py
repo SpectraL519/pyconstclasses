@@ -9,11 +9,18 @@ class ConstClassBase:
     def __init__(
         self,
         /,
+        cls_attrs: set[str] = set(),
         *,
         include: set[str] = None,
         exclude: set[str] = None,
         with_strict_types: bool = False,
     ):
+        intersection = cls_attrs & MANDATORY_CONST_ATTRS
+        if intersection:
+            raise ConfigurationError(
+                f"Const class cannot have members: [{', '.join(intersection)}]"
+            )
+
         if include is not None and exclude is not None:
             raise ConfigurationError(
                 "`include` and `exclude` parameters cannot be used simultaneously"

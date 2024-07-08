@@ -5,6 +5,10 @@ def msg(err: Exception) -> str:
     return str(err.value)
 
 
+def config_not_empty_cls_attrs_intersection_msg_prefix() -> str:
+    return "Const class cannot have members"
+
+
 def config_include_and_exclude_used_error_msg_postfix() -> str:
     return "`include` and `exclude` parameters cannot be used simultaneously"
 

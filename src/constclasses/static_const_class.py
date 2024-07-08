@@ -15,8 +15,8 @@ def static_const_class_impl(
             self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
                 with_strict_types=with_strict_types, include=include, exclude=exclude
             )
-            super(StaticConstClass, self).__init__()
             self.__dict__[CC_INITIALIZED_ATTR_NAME] = False
+            super(StaticConstClass, self).__init__()
 
         def __setattr__(self, attr_name: str, attr_value) -> None:
             if self._cc_initialized and self._cc_base.is_const_attribute(attr_name):

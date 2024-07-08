@@ -5,6 +5,7 @@ from constclasses.ccerror import ConstError, InitializationError
 from constclasses.const_class import const_class
 from constclasses.const_class_base import MANDATORY_CONST_ATTRS
 
+
 X_ATTR_NAME = "x"
 S_ATTR_NAME = "s"
 ATTR_NAMES = {X_ATTR_NAME, S_ATTR_NAME}
@@ -176,3 +177,24 @@ def test_member_modification_with_strict_types():
         with pytest.raises(TypeError) as err:
             setattr(const_instance, attr_name, DUMMY_VALUE)
         assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())
+
+
+def test_initialization_with_inherited_constructor():
+    @const_class(inherit_constructor=True)
+    class ConstClassWithConstructor:
+        x: int
+        s: str
+
+        def __init__(self, x: int):
+            self.x = x
+            self.s = str(x)
+
+    x_value = ATTR_VALS_1[X_ATTR_NAME]
+    const_instance = None
+    def _initialize():
+        nonlocal const_instance
+        const_instance = ConstClassWithConstructor(x_value)
+
+    util.assert_does_not_throw(_initialize)
+    assert const_instance.x == x_value
+    assert const_instance.s == str(x_value)

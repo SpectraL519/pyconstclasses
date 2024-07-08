@@ -1,5 +1,9 @@
 from .ccerror import ConstError, InitializationError
-from .const_class_base import CC_BASE_ATTR_NAME, CC_INITIALIZED_ATTR_NAME, ConstClassBase
+from .const_class_base import (
+    CC_BASE_ATTR_NAME,
+    CC_INITIALIZED_ATTR_NAME,
+    ConstClassBase,
+)
 
 
 def const_class_impl(

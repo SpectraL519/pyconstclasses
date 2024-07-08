@@ -5,7 +5,6 @@ from constclasses.ccerror import ConstError, InitializationError
 from constclasses.const_class import const_class
 from constclasses.const_class_base import MANDATORY_CONST_ATTRS
 
-
 X_ATTR_NAME = "x"
 S_ATTR_NAME = "s"
 ATTR_NAMES = {X_ATTR_NAME, S_ATTR_NAME}
@@ -191,6 +190,7 @@ def test_initialization_with_inherited_constructor():
 
     x_value = ATTR_VALS_1[X_ATTR_NAME]
     const_instance = None
+
     def _initialize():
         nonlocal const_instance
         const_instance = ConstClassWithConstructor(x_value)

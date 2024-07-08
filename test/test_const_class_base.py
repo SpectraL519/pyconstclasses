@@ -41,9 +41,11 @@ def test_init_for_exclude_intersecting_with_mandatory_const_fields():
     err_msg = str(err.value)
     assert err_msg.endswith(util.config_invalid_exclude_error_msg(MANDATORY_CONST_ATTRS))
 
+
 def test_init_with_valid_parameter_configuration():
     def _test():
         _ = ConstClassBase()
+
     util.assert_does_not_throw(_test)
 
 

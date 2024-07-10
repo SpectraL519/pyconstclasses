@@ -18,6 +18,8 @@
 * Installation
 * [Tutorial](#tutorial)
     * [Basic usage](#basic-usage)
+    * [Common parameters](#common-parameters)
+    * [Decorator-specific parameters](#decorator-specific-parameters)
 * Examples
 * [Dev notes](#dev-notes)
 * [Licence](#licence)
@@ -52,18 +54,24 @@ The core of the PyConstClasses package are the `const_class` and `static_const_c
 
     if __name__ == "__main__":
         john = Person("John", "Doe")
-        print(john)
+        print(f"{john = }")
 
         try:
             john.first_name = "Bob"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        try:
+            john.last_name = "Smith"
         except cc.ConstError as err:
             print(f"Error: {err}")
     ```
 
     This program will produce the following output:
     ```
-    John Doe
+    john = John Doe
     Error: Cannot modify const attribute `first_name` of class `Person`
+    Error: Cannot modify const attribute `last_name` of class `Person`
     ```
 
 * The `static_const_class` deacorator allows you to define a pseudo-static resource with const members (it creates an instance of the decorated class):
@@ -81,7 +89,12 @@ The core of the PyConstClasses package are the `const_class` and `static_const_c
 
 
     if __name__ == "__main__":
-        print(ProjectConfiguration)
+        print(f"Project configuration:\n{ProjectConfiguration}")
+
+        try:
+            ProjectConfiguration.name = "NewProjectName"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
 
         try:
             ProjectConfiguration.version = "beta"
@@ -91,8 +104,10 @@ The core of the PyConstClasses package are the `const_class` and `static_const_c
 
     This program will produce the following output:
     ```
+    Project configuration:
     Project: MyProject
     Version: alpha
+    Error: Cannot modify const attribute `name` of class `ProjectConfiguration`
     Error: Cannot modify const attribute `version` of class `ProjectConfiguration`
     ```
 
@@ -241,6 +256,99 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
 
     The class defined in this example has the behaviour equivalent to the `include` example.
 
+> [!IMPORTANT]
+> Simultaneous usage of the `incldue` and `exclude` parameters will result in raising a configuration error.
+
+<br />
+
+### Decorator-specific parameters
+
+> [!NOTE]
+> In the current version of the package only the `const_class` decorator has it's own specific parameters.
+
+* `with_kwargs: bool`
+
+    By default the `const_class` decorator adds a constructor which uses positional arguments to create a constant instance of the class. However if this parameter is set to `True`, the decorator will use the keyword arguments for this purpose.
+
+    Example:
+    ```python
+    # const_class_with_kwargs.py
+
+    @cc.const_class
+    class PersonArgs:
+        first_name: str
+        last_name: str
+
+        def __repr__(self) -> str:
+            return f"{self.first_name} {self.last_name}"
+
+
+    @cc.const_class(with_kwargs=True)
+    class PersonKwargs:
+        first_name: str
+        last_name: str
+
+        def __repr__(self) -> str:
+            return f"{self.first_name} {self.last_name}"
+
+
+    if __name__ == "__main__":
+        john_args = PersonArgs("John", "Doe")
+        print(f"{john_args = }")
+
+        try:
+            john_args = PersonArgs(first_name="John", last_name="Doe")
+        except cc.InitializationError as err:
+            print(f"Error: {err}")
+
+        john_kwargs = PersonKwargs(first_name="John", last_name="Doe")
+        print(f"{john_kwargs = }")
+    ```
+
+    This program will produce the following output:
+    ```
+    john_args = John Doe
+    Error: Invalid number of arguments: expected 2 - got 0
+    john_kwargs = John Doe
+    ```
+
+* `inherit_constructor: bool`
+
+    By default the `const_class` decorator defines a constructor which manually assigns values to attributes. However if this parameter is set to `True` the class will be initialized using the user defined `__init__` function of the decorated class.
+
+    Example:
+    ```python
+    # const_class_inherit_constructor.py
+
+    @cc.static_const_class
+    class ProjectConfiguration:
+        name: str = "MyProject"
+        version: str = "alpha"
+
+        def __repr__(self):
+            return f"Project: {self.name}\nVersion: {self.version}"
+
+
+    if __name__ == "__main__":
+        print(f"Project configuration:\n{ProjectConfiguration}")
+
+        try:
+            ProjectConfiguration.name = "NewProjectName"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        try:
+            ProjectConfiguration.version = "beta"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+    ```
+
+    This program will produce the following output:
+    ```
+    john = John Doe
+    Error: Cannot modify const attribute `first_name` of class `Person`
+    Error: Cannot modify const attribute `last_name` of class `Person`
+    ```
 
 
 <br />

@@ -1,5 +1,6 @@
 import constclasses as cc
 
+
 @cc.const_class
 class Person:
     first_name: str
@@ -11,7 +12,7 @@ class Person:
 
 if __name__ == "__main__":
     john = Person("John", "Doe")
-    print(john)
+    print(f"{john = }")
 
     try:
         john.first_name = "Bob"

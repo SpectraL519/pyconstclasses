@@ -1,5 +1,6 @@
 import constclasses as cc
 
+
 @cc.static_const_class
 class ProjectConfiguration:
     name: str = "MyProject"
@@ -10,7 +11,7 @@ class ProjectConfiguration:
 
 
 if __name__ == "__main__":
-    print(ProjectConfiguration)
+    print(f"Project configuration:\n{ProjectConfiguration}")
 
     try:
         ProjectConfiguration.version = "beta"

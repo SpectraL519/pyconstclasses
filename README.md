@@ -97,7 +97,7 @@ The core of the PyConstClasses package are the `const_class` and `static_const_c
     ```
 
 > [!IMPORTANT]
-> In the current version of the package the constant attributes have to be defined using annotations, i.e. the `member: type ( = value)` syntax of the class member declaration is required
+> In the current version of the package the constant attributes have to be defined using annotations, i.e. the `member: type (= value)` syntax of the class member declaration is required
 
 <br />
 
@@ -113,7 +113,7 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
 
     Example:
     ```python
-    # with_strict_types.py
+    # common_with_strict_types.py
 
     @cc.const_class
     class Person:
@@ -156,6 +156,90 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
             attribute: age, declared type: <class 'int'>, actual type: <class 'float'>
     John Doe [age: 21]
     ```
+
+* `include: set[str]`
+
+    This parameter defines a set of attribute names which are supposed to be treated as constant. If the parameter is not set (or set to `None`) all attributes will be treaded as constant.
+
+    Example:
+    ```python
+    # common_include.py
+
+    @cc.const_class(include=["first_name", "last_name"])
+    class Person:
+        first_name: str
+        last_name: str
+        age: int
+
+        def __repr__(self) -> str:
+            return f"{self.first_name} {self.last_name} [age: {self.age}]"
+
+
+    if __name__ == "__main__":
+        john = Person("John", "Doe", 21)
+        print(f"{john = }")
+
+        try:
+            john.first_name = "Bob"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        try:
+            john.last_name = "Smith"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        # valid modification as the `age` parameter is not in the include set
+        john.age = 22
+        print(f"{john = }")
+    ```
+
+    This program will produce the followig output:
+    ```
+    john = John Doe [age: 21]
+    Error: Cannot modify const attribute `first_name` of class `Person`
+    Error: Cannot modify const attribute `last_name` of class `Person`
+    john = John Doe [age: 22]
+    ```
+
+* `exclude: set[str]`
+
+    This parameter defines a set of attribute names which are supposed to be treated as mutable. If the parameter is not set (or set to `None`) all attributes will be treaded as constant.
+
+    Example:
+    ```python
+    # common_exclude.py
+
+    @cc.const_class(exclude=["age"])
+    class Person:
+        first_name: str
+        last_name: str
+        age: int
+
+        def __repr__(self) -> str:
+            return f"{self.first_name} {self.last_name} [age: {self.age}]"
+
+
+    if __name__ == "__main__":
+        john = Person("John", "Doe", 21)
+        print(f"{john = }")
+
+        try:
+            john.first_name = "Bob"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        try:
+            john.last_name = "Smith"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        # valid modification as the `age` parameter is in the exclude set
+        john.age = 22
+        print(f"{john = }")
+    ```
+
+    The class defined in this example has the behaviour equivalent to the `include` example.
 
 
 

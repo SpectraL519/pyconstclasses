@@ -22,7 +22,7 @@ class PersonStrictTypes:
 
 if __name__ == "__main__":
     john = Person("John", "Doe", 21.5)
-    print(john)
+    print(f"{john = }")
 
     try:
         # invalid as 21.5 is not an instance of int
@@ -31,4 +31,4 @@ if __name__ == "__main__":
         print(f"Error:\n{err}")
 
     john_strict = PersonStrictTypes("John", "Doe", 21)
-    print(john_strict)
+    print(f"{john_strict = }")

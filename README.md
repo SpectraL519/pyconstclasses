@@ -20,8 +20,9 @@
     * [Basic usage](#basic-usage)
     * [Common parameters](#common-parameters)
     * [Decorator-specific parameters](#decorator-specific-parameters)
-* Examples
+* [Examples](#examples)
 * [Dev notes](#dev-notes)
+* TODO
 * [Licence](#licence)
 
 <br />
@@ -350,22 +351,83 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
     Error: Cannot modify const attribute `last_name` of class `Person`
     ```
 
+<br />
+<br />
+
+## Examples
+
+The project examples (including the ones displayed in the [Tutorial](#tutorial) section) can be found in the `examples` directory.
+
+To run the example programs you need to install the PyConstClasses package into your python environment. You can install it via `pip` of using a local distribution build (the process is described in the [Dev notes](#dev-notes) section).
 
 <br />
 <br />
 
 ## Dev notes
-<!-- TODO: extract to sepparate file -->
 
-* export requirements: `pip freeze > requirements-dev.txt`
-* install requirements: `pip install -r requirements-dev.txt`
-* build distribution: `python -m build` (`pip install build`)
-* project venv: `cc_venv`, `test_cc_venv` (for local package installation tests)
-* install package in test venv: `pip install dist/pyconstclasses-<version>-py3-none-any.whl --force-reinstall`
-* test with coverage: `pytest -v constclasses/test/ --cov=constclasses --cov-report=xml --cov-report=html` or `tox`
-* format:
-    * `black .` or `python -m black .` (`--check`)
-    * `isort .` or `python -m isort .` (`--check`)
+### Environment setup:
+
+To be able to build or test the project create a python virtual environment
+
+```shell
+python -m venv cc_venv
+source cc_venv/bin/activate
+pip install -r requirements-dev.txt
+```
+
+> [!NOTE]
+> If any package listed in `requirements-dev.txt` is no longer required or if there is a new required package, update the requirements file using: `pip freeze > requirements-dev.txt`
+
+### Building
+
+To build the package, run:
+```shell
+python -m build
+```
+
+This will generate the `dist` directory with the `.whl` file. To locally test if the distribution is correct, you can run:
+```shell
+pip install dist/pyconstclasses-<version>-py3-none-any.whl --force-reinstall
+```
+
+> [!NOTE]
+> To test the package build locally it is recommended to use a sepparate virtual environment.
+
+### Uploading
+
+To upload the package to [pypi](https://pypi.org/) do the following:
+
+* Make sure that the `twine` package is installed in your python environment: `pip show twine`
+*
+
+### Testing:
+
+The project uses `pytest` and `tox` for testing purposes.
+* To run the tests for the current python interpreter run: `pytest -v`
+* To run tests for all supported python versions run: `tox`
+
+### Coverage
+
+To generate a test coverage report you can run `tox` which will automatically generate `json` and `xml` reports (the types of coverage reports can be adjusted in `tox.ini`).
+
+You can also generate the coverage reports manually with `pytest`, e.g.:
+```shell
+pytest -v --cov=constclasses --cov-report=xml --cov-report=html
+```
+
+> [!NOTE]
+> When testing the project or generating coverate reports, python (or it's packages) will generate additional files (cache file, etc.). To easily clean those files from the working directory run `bash scripts/cleanup.sh`
+
+### Formatting:
+
+The project uses `black` and `isort` for formatting purposes. To format the source code use the prepared script:
+```shell
+bash scripts/format.sh
+```
+You can also use the `black` and `isort` packages directly, e.g.:
+```shell
+python -m <black/isort> <path> (--check)
+```
 
 <br />
 <br />

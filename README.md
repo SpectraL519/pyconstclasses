@@ -24,7 +24,6 @@
 * [Dev notes](#dev-notes)
     * [Environment setup](#environment-setup)
     * [Building](#building)
-    * [Uploading](#uploading)
     * [Testing](#testing)
     * [Coverage](#coverage)
     * [Formatting](#formatting)
@@ -411,31 +410,6 @@ pip install dist/pyconstclasses-<version>-py3-none-any.whl --force-reinstall
 
 > [!NOTE]
 > To test the package build locally it is recommended to use a sepparate virtual environment.
-
-### Uploading
-
-To upload the package to [pypi](https://pypi.org/) do the following:
-
-* Make sure that the `twine` package is installed in your python environment: `pip show twine`
-* Upload the package to the testpypi repository:
-    ```shell
-    python -m twine upload --repository testpypi dist/*
-    ```
-* Verify wether the package has been succesfully uploaded by installing it to your python (virtual) environment:
-    ```shell
-    python -m pip install --index-url https://test.pypi.org/simple/ --no-deps pyconstclasses
-    ```
-* Verify the installation by running the example programs
-* If no problem occured, upload the package to [pypi](https://pypi.org/):
-    ```shell
-    twine upload dist/*
-    ```
-* Verify wether the package has been succesfully uploaded by installing it to your python (virtual) environment:
-    ```shell
-    python -m pip install pyconstclasses
-    ```
-* Verify the installation by running the example programs
-
 
 ### Testing:
 

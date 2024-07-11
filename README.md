@@ -15,15 +15,34 @@
 
 ## Table of contents
 
-* Installation
+* [Installation](#installation)
 * [Tutorial](#tutorial)
     * [Basic usage](#basic-usage)
     * [Common parameters](#common-parameters)
     * [Decorator-specific parameters](#decorator-specific-parameters)
 * [Examples](#examples)
 * [Dev notes](#dev-notes)
-* TODO
+    * [Environment setup](#environment-setup)
+    * [Building](#building)
+    * [Uploading](#uploading)
+    * [Testing](#testing)
+    * [Coverage](#coverage)
+    * [Formatting](#formatting)
 * [Licence](#licence)
+
+<br />
+<br />
+
+## Installation
+
+To install the PyConstClasses package in your python environment run:
+```shell
+pip install pyconstclasses
+```
+or
+```shell
+python -m pip install pyconstclasses
+```
 
 <br />
 <br />
@@ -398,7 +417,25 @@ pip install dist/pyconstclasses-<version>-py3-none-any.whl --force-reinstall
 To upload the package to [pypi](https://pypi.org/) do the following:
 
 * Make sure that the `twine` package is installed in your python environment: `pip show twine`
-*
+* Upload the package to the testpypi repository:
+    ```shell
+    python -m twine upload --repository testpypi dist/*
+    ```
+* Verify wether the package has been succesfully uploaded by installing it to your python (virtual) environment:
+    ```shell
+    python -m pip install --index-url https://test.pypi.org/simple/ --no-deps pyconstclasses
+    ```
+* Verify the installation by running the example programs
+* If no problem occured, upload the package to [pypi](https://pypi.org/):
+    ```shell
+    twine upload dist/*
+    ```
+* Verify wether the package has been succesfully uploaded by installing it to your python (virtual) environment:
+    ```shell
+    python -m pip install pyconstclasses
+    ```
+* Verify the installation by running the example programs
+
 
 ### Testing:
 

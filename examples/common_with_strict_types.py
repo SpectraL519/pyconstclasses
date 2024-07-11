@@ -10,6 +10,7 @@ class Person:
     def __repr__(self) -> str:
         return f"{self.first_name} {self.last_name} [age: {self.age}]"
 
+
 @cc.const_class(with_strict_types=True)
 class PersonStrictTypes:
     first_name: str

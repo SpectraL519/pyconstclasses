@@ -6,6 +6,7 @@ on:
     paths:
       - src/**
       - test/**
+      - examples/**
       - pyproject.toml
 
 jobs:

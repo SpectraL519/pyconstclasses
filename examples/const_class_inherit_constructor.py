@@ -7,7 +7,7 @@ class Person:
     last_name: str
 
     def __init__(self, full_name: str):
-        self.first_name, self.last_name = full_name.split(' ')
+        self.first_name, self.last_name = full_name.split(" ")
 
     def __repr__(self) -> str:
         return f"{self.first_name} {self.last_name}"

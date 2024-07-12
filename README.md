@@ -131,6 +131,49 @@ The core of the PyConstClasses package are the `const_class` and `static_const_c
     Error: Cannot modify const attribute `version` of class `ProjectConfiguration`
     ```
 
+    Although the `static_const_class` decorator prevents "standard" class instantiation, you can create mutable instances of such classes:
+
+    ```python
+    @cc.static_const_class
+    class DatabaseConfiguration:
+        host: str = "localhost"
+        port: int = 5432
+        username: str = "admin"
+        password: str = "secret"
+
+        def __repr__(self):
+            return (
+                f"DatabaseConfiguration:\n"
+                f"Host: {self.host}\n"
+                f"Port: {self.port}\n"
+                f"Username: {self.username}\n"
+                f"Password: {self.password}"
+            )
+
+
+    if __name__ == "__main__":
+        print(f"Database configuration:\n{DatabaseConfiguration}")
+
+        try:
+            DatabaseConfiguration.host = "remotehost"
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        try:
+            DatabaseConfiguration.port = 3306
+        except cc.ConstError as err:
+            print(f"Error: {err}")
+
+        # Create a mutable instance for testing or development
+        mutable_config = cc.mutable_instance(DatabaseConfiguration)
+        mutable_config.host = "testhost"
+        mutable_config.username = "testuser"
+        mutable_config.password = "testpassword"
+
+        print("\nMutable configuration for testing:")
+        print(mutable_config)
+    ```
+
 > [!IMPORTANT]
 > In the current version of the package the constant attributes have to be defined using annotations, i.e. the `member: type (= value)` syntax of the class member declaration is required
 

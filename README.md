@@ -1,6 +1,7 @@
 # PyConstClasses
 
 [![tests](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/tests)
+[![examples](https://github.com/SpectraL519/pyconstclasses/actions/workflows/examples.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/examples)
 [![format](https://github.com/SpectraL519/pyconstclasses/actions/workflows/format.yaml/badge.svg)](https://github.com/SpectraL519/pyconstclasses/actions/workflows/format)
 [![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/SpectraL519/f6cec4c4c8e1733cfe45f807918a128a/raw/covbadge.json)]()
 

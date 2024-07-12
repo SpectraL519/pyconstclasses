@@ -10,7 +10,7 @@ on:
 
 jobs:
   run_examples:
-    name: Build the library
+    name: Run the project examples
     runs-on: ubuntu-latest
     strategy:
       matrix:

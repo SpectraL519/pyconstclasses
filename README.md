@@ -235,9 +235,9 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
     John Doe [age: 21]
     ```
 
-* `include: set[str]`
+* `include: set[str]` and `exclude: set[str]`
 
-    This parameter defines a set of attribute names which are supposed to be treated as constant. If the parameter is not set (or set to `None`) all attributes will be treaded as constant.
+    These parameters are used to define which class attributes are supposed to be treated as constant. If they are not set (or explicitly set to `None`) all attributes will be treaded as constant.
 
     Example:
     ```python
@@ -280,9 +280,7 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
     john = John Doe [age: 22]
     ```
 
-* `exclude: set[str]`
-
-    This parameter defines a set of attribute names which are supposed to be treated as mutable. If the parameter is not set (or set to `None`) all attributes will be treaded as constant.
+    The same can be achieved using the `exclude` parameter:
 
     Example:
     ```python
@@ -296,28 +294,9 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
 
         def __repr__(self) -> str:
             return f"{self.first_name} {self.last_name} [age: {self.age}]"
-
-
-    if __name__ == "__main__":
-        john = Person("John", "Doe", 21)
-        print(f"{john = }")
-
-        try:
-            john.first_name = "Bob"
-        except cc.ConstError as err:
-            print(f"Error: {err}")
-
-        try:
-            john.last_name = "Smith"
-        except cc.ConstError as err:
-            print(f"Error: {err}")
-
-        # valid modification as the `age` parameter is in the exclude set
-        john.age = 22
-        print(f"{john = }")
     ```
 
-    The class defined in this example has the behaviour equivalent to the `include` example.
+    The class defined in this example has the behaviour equivalent to the earlier `include` example.
 
 > [!IMPORTANT]
 > Simultaneous usage of the `incldue` and `exclude` parameters will result in raising a configuration error.
@@ -418,7 +397,7 @@ Both const decorators - `const_class` and `static_const_class` - have the follow
 
 ## Examples
 
-The project examples (including the ones displayed in the [Tutorial](#tutorial) section) can be found in the `examples` directory.
+The project examples shown in the [Tutorial](#tutorial) section can be found in the `examples` directory.
 
 To run the example programs you need to install the PyConstClasses package into your python environment. You can install it via `pip` of using a local distribution build (the process is described in the [Dev notes](#dev-notes) section).
 
@@ -453,7 +432,7 @@ pip install dist/pyconstclasses-<version>-py3-none-any.whl --force-reinstall
 ```
 
 > [!NOTE]
-> To test the package build locally it is recommended to use a sepparate virtual environment.
+> To test the package build locally it is recommended to use a clean virtual environment.
 
 ### Testing:
 

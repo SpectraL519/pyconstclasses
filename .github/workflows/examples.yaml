@@ -1,0 +1,46 @@
+name: examples
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - src/**
+      - examples/**
+      - pyproject.toml
+
+jobs:
+  run_examples:
+    name: Run the project examples
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install build
+
+      - name: Build the library for ${{ matrix.python-version }}
+        run: |
+          python -m build
+
+      - name: Install library
+        run: |
+          python -m pip install dist/pyconstclasses-*-py3-none-any.whl --force-reinstall
+
+      - name: Run the example programs
+        run: |
+          for program in examples/*.py; do
+            echo "-> $program"
+            python "$program"
+            echo ""
+          done

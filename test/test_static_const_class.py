@@ -36,22 +36,6 @@ def test_member_modification():
         assert util.msg(err) == util.const_error_msg(attr_name, STATIC_CONST_CLASS_NAME)
 
 
-def test_mutable_instance_of_static_const_class():
-    mut_instance = mutable_instance(StaticConstClass)
-
-    for attr_name in ATTR_NAMES:
-        assert getattr(mut_instance, attr_name) == ATTR_VALS_1[attr_name]
-        setattr(mut_instance, attr_name, ATTR_VALS_2[attr_name])
-        assert getattr(mut_instance, attr_name) == ATTR_VALS_2[attr_name]
-
-    for attr_name in MANDATORY_CONST_ATTRS:
-        with pytest.raises(ConstError) as err:
-            setattr(mut_instance, attr_name, DUMMY_VALUE)
-        assert util.msg(err) == util.const_error_msg(
-            "mutable_StaticConstClass", attr_name
-        )
-
-
 def test_member_modification_with_include_parameter():
     include = {X_ATTR_NAME}
 
@@ -136,3 +120,19 @@ def test_member_modification_with_strict_types():
         with pytest.raises(TypeError) as err:
             setattr(StaticConstClassStrictTypes, attr_name, DUMMY_VALUE)
         assert util.msg(err).startswith(util.invalid_type_error_msg_prefix())
+
+
+def test_mutable_instance_of_static_const_class():
+    mut_instance = mutable_instance(StaticConstClass)
+
+    for attr_name in ATTR_NAMES:
+        assert getattr(mut_instance, attr_name) == ATTR_VALS_1[attr_name]
+        setattr(mut_instance, attr_name, ATTR_VALS_2[attr_name])
+        assert getattr(mut_instance, attr_name) == ATTR_VALS_2[attr_name]
+
+    for attr_name in MANDATORY_CONST_ATTRS:
+        with pytest.raises(ConstError) as err:
+            setattr(mut_instance, attr_name, DUMMY_VALUE)
+        assert util.msg(err) == util.const_error_msg(
+            "mutable_StaticConstClass", attr_name
+        )

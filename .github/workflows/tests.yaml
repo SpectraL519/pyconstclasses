@@ -4,6 +4,7 @@ on:
     branches:
       - '*'
     paths:
+      - .github/workflows/tests.yaml
       - src/**
       - test/**
       - tox.ini
@@ -34,11 +35,15 @@ jobs:
         run: |
           python -m tox
 
+      - name: List files after tests
+        run: ls -la
+
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
         with:
           name: covdata-${{ matrix.python-version }}
           path: .coverage.*
+          if-no-files-found: warn
 
   coverage:
     name: Generate coverage status badge
@@ -62,6 +67,9 @@ jobs:
         with:
           pattern: covdata-*
           merge-multiple: true
+
+      - name: List downloaded artifacts
+        run: ls -la
 
       - name: Combine coverage data
         run: |

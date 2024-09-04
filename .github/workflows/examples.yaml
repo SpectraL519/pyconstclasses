@@ -4,7 +4,6 @@ on:
     branches:
       - '*'
     paths:
-      - .github/workflows/examples.yaml
       - src/**
       - examples/**
       - pyproject.toml
@@ -27,13 +26,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: python -m pip install build
+        run: |
+          python -m pip install build
 
       - name: Build the library for ${{ matrix.python-version }}
-        run: python -m build
+        run: |
+          python -m build
 
       - name: Install library
-        run: python -m pip install dist/pyconstclasses-*-py3-none-any.whl --force-reinstall
+        run: |
+          python -m pip install dist/pyconstclasses-*-py3-none-any.whl --force-reinstall
 
       - name: Run the example programs
         run: |

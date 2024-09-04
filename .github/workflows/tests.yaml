@@ -4,7 +4,6 @@ on:
     branches:
       - '*'
     paths:
-      - .github/workflows/tests.yaml
       - src/**
       - test/**
       - tox.ini
@@ -28,10 +27,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: python -m pip install tox tox-gh-actions
+        run: |
+          python -m pip install tox tox-gh-actions
 
       - name: Run tox for ${{ matrix.python-version }}
-        run: python -m tox
+        run: |
+          python -m tox
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
@@ -53,7 +54,8 @@ jobs:
           python-version: 3.12
 
       - name: Install dependencies
-        run: python -m pip install tox tox-gh-actions
+        run: |
+          python -m pip install tox tox-gh-actions
 
       - name: Download coverage data
         uses: actions/download-artifact@v4

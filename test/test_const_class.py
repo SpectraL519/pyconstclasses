@@ -198,3 +198,45 @@ def test_initialization_with_inherited_constructor():
     util.assert_does_not_throw(_initialize)
     assert const_instance.x == x_value
     assert const_instance.s == str(x_value)
+
+
+def test_new_with_kwargs():
+    @const_class(with_kwargs=True)
+    class ConstClassWithKwargs:
+        x: int
+        s: str
+
+        def __eq__(self, other: object) -> bool:
+            return isinstance(other, self.__class__) and other.x == self.x and other.s == self.s
+
+    const_instance = ConstClassWithKwargs(**ATTR_VALS_1)
+
+    # should create an exact copy by default
+    const_instance_new_default = const_instance.new()
+    assert const_instance_new_default == const_instance
+
+    const_instance_new = const_instance.new(x=ATTR_VALS_2[X_ATTR_NAME])
+    assert isinstance(const_instance_new, ConstClassWithKwargs)
+    assert const_instance_new.s == const_instance.s
+    assert const_instance_new.x == ATTR_VALS_2[X_ATTR_NAME]
+
+
+def test_new_with_args():
+    @const_class(with_kwargs=False)
+    class ConstClassWithKwargs:
+        x: int
+        s: str
+
+        def __eq__(self, other: object) -> bool:
+            return isinstance(other, self.__class__) and other.x == self.x and other.s == self.s
+
+    const_instance = ConstClassWithKwargs(*(ATTR_VALS_1.values()))
+
+    # should create an exact copy by default
+    const_instance_new_default = const_instance.new()
+    assert const_instance_new_default == const_instance
+
+    const_instance_new = const_instance.new(x=ATTR_VALS_2[X_ATTR_NAME])
+    assert isinstance(const_instance_new, ConstClassWithKwargs)
+    assert const_instance_new.s == const_instance.s
+    assert const_instance_new.x == ATTR_VALS_2[X_ATTR_NAME]

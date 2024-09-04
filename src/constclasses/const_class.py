@@ -5,6 +5,8 @@ from .const_class_base import (
     ConstClassBase,
 )
 
+from copy import deepcopy
+
 
 def const_class_impl(
     cls,
@@ -57,6 +59,17 @@ def const_class_impl(
             self.__dict__[attr_name] = self._cc_base.process_attribute_type(
                 attr_name, cls.__annotations__.get(attr_name), attr_value
             )
+
+        def new(self, **kwargs):
+            def _get_value(key: str):
+                return kwargs.get(key, deepcopy(getattr(self, key)))
+
+            if with_kwargs:
+                init_params = {key: _get_value(key) for key in self.__annotations__}
+                return ConstClass(**init_params)
+            else:
+                init_params = [_get_value(key) for key in self.__annotations__]
+                return ConstClass(*init_params)
 
     ConstClass.__name__ = cls.__name__
     ConstClass.__module__ = cls.__module__

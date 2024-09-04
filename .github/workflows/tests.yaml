@@ -59,7 +59,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: covdata-*
-          merge: true
+          merge-multiple: true
 
       - name: Combine coverage data
         run: |

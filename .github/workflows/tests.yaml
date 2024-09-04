@@ -33,9 +33,6 @@ jobs:
       - name: Run tox for ${{ matrix.python-version }}
         run: python -m tox
 
-      - name: List coverage files
-        run: find . -name ".coverage*"
-
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
         with:
@@ -63,9 +60,6 @@ jobs:
         with:
           pattern: covdata-*
           merge: true
-
-      - name: Debug coverage files
-        run: find . -name ".coverage*"
 
       - name: Combine coverage data
         run: |

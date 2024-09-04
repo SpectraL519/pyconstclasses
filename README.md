@@ -94,7 +94,7 @@ The core of the PyConstClasses package are the `const_class` and `static_const_c
     Error: Cannot modify const attribute `last_name` of class `Person`
     ```
 
-    This `const_class` decorators also provides the `new` method which allows for the creationg of new instances of the class based on an existing instance with the option to modify individual fields:
+    The `const_class` decorators also provides the `new` method which allows for the creationg of new instances of the class based on an existing instance with the option to modify individual fields:
 
     ```python
     # const_class_new.py
@@ -497,15 +497,15 @@ pytest -v --cov=constclasses --cov-report=xml --cov-report=html
 ```
 
 > [!NOTE]
-> When testing the project or generating coverate reports, python (or it's packages) will generate additional files (cache file, etc.). To easily clean those files from the working directory run `bash scripts/cleanup.sh`
+> When testing the project or generating coverate reports, python (or it's packages) will generate additional files (cache file, etc.). To easily clean those files from the working directory run `./scripts/cleanup.sh`
 
 ### Formatting:
 
 The project uses `black` and `isort` for formatting purposes. To format the source code use the prepared script:
 ```shell
-bash scripts/format.sh
+./scripts/format.sh
 ```
-You can also use the `black` and `isort` packages directly, e.g.:
+You can also use the `black` and `isort` packages directly, e.g.
 ```shell
 python -m <black/isort> <path> (--check)
 ```

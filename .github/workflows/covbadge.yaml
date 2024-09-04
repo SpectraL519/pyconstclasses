@@ -4,7 +4,7 @@ on:
     branches:
       - '*'
     paths:
-      - .github/workflows/coverage.yaml
+      - .github/workflows/covbadge.yaml
       - src/**
       - test/**
       - tox.ini

@@ -207,7 +207,11 @@ def test_new_with_kwargs():
         s: str
 
         def __eq__(self, other: object) -> bool:
-            return isinstance(other, self.__class__) and other.x == self.x and other.s == self.s
+            return (
+                isinstance(other, self.__class__)
+                and other.x == self.x
+                and other.s == self.s
+            )
 
     const_instance = ConstClassWithKwargs(**ATTR_VALS_1)
 
@@ -228,7 +232,11 @@ def test_new_with_args():
         s: str
 
         def __eq__(self, other: object) -> bool:
-            return isinstance(other, self.__class__) and other.x == self.x and other.s == self.s
+            return (
+                isinstance(other, self.__class__)
+                and other.x == self.x
+                and other.s == self.s
+            )
 
     const_instance = ConstClassWithKwargs(*(ATTR_VALS_1.values()))
 

@@ -1,11 +1,11 @@
+from copy import deepcopy
+
 from .ccerror import ConstError, InitializationError
 from .const_class_base import (
     CC_BASE_ATTR_NAME,
     CC_INITIALIZED_ATTR_NAME,
     ConstClassBase,
 )
-
-from copy import deepcopy
 
 
 def const_class_impl(

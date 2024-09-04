@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyconstclasses"
-version = "1.0.0"
+version = "1.0.4"
 description = "Package with const class decoratos and utility"
 authors = [
   {name = "SpectraL519"}

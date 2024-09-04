@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from .ccerror import ConstError, InitializationError
 from .const_class_base import (
     CC_BASE_ATTR_NAME,
@@ -16,8 +18,13 @@ def const_class_impl(
 ):
     class ConstClass(cls):
         def __init__(self, *args, **kwargs):
+            cls_attrs = cls.__annotations__
+
             self.__dict__[CC_BASE_ATTR_NAME] = ConstClassBase(
-                with_strict_types=with_strict_types, include=include, exclude=exclude
+                cls_attrs=cls_attrs.keys(),
+                with_strict_types=with_strict_types,
+                include=include,
+                exclude=exclude,
             )
             self.__dict__[CC_INITIALIZED_ATTR_NAME] = False
 
@@ -29,17 +36,17 @@ def const_class_impl(
                 super(ConstClass, self).__init__()
 
             if with_kwargs:
-                for attr_name, attr_type in cls.__annotations__.items():
+                for attr_name, attr_type in cls_attrs.items():
                     self.__dict__[attr_name] = self._cc_base.process_attribute_type(
                         attr_name, attr_type, kwargs.get(attr_name)
                     )
             else:
-                if len(args) != len(cls.__annotations__):
+                if len(args) != len(cls_attrs):
                     raise InitializationError.invalid_number_of_arguments(
-                        len(cls.__annotations__), len(args)
+                        len(cls_attrs), len(args)
                     )
 
-                for i, (attr_name, attr_type) in enumerate(cls.__annotations__.items()):
+                for i, (attr_name, attr_type) in enumerate(cls_attrs.items()):
                     self.__dict__[attr_name] = self._cc_base.process_attribute_type(
                         attr_name, attr_type, args[i]
                     )
@@ -52,6 +59,17 @@ def const_class_impl(
             self.__dict__[attr_name] = self._cc_base.process_attribute_type(
                 attr_name, cls.__annotations__.get(attr_name), attr_value
             )
+
+        def new(self, **kwargs):
+            def _get_value(key: str):
+                return kwargs.get(key, deepcopy(getattr(self, key)))
+
+            if with_kwargs:
+                init_params = {key: _get_value(key) for key in self.__annotations__}
+                return ConstClass(**init_params)
+            else:
+                init_params = [_get_value(key) for key in self.__annotations__]
+                return ConstClass(*init_params)
 
     ConstClass.__name__ = cls.__name__
     ConstClass.__module__ = cls.__module__

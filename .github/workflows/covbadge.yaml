@@ -1,0 +1,80 @@
+name: covbadge
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - .github/workflows/covbadge.yaml
+      - src/**
+      - test/**
+      - tox.ini
+
+jobs:
+  run_coverage:
+    name: Run project tests with coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install tox tox-gh-actions
+
+      - name: Run tox for ${{ matrix.python-version }}
+        run: |
+          python -m tox
+
+      - name: Upload coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: covdata-312
+          path: ./.coverage*
+          if-no-files-found: error
+
+  coverage:
+    name: Generate coverage status badge
+    needs: run_coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          python -m pip install tox tox-gh-actions
+
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
+        with:
+          pattern: covdata-312
+
+      - name: Combine coverage data
+        run: |
+          python -m tox -e coverage
+          export TOTAL_COV=$(python -c "import json; print(json.load(open('coverage.json'))['totals']['percent_covered_display'])")
+          echo total_cov=$TOTAL_COV >> $GITHUB_ENV
+          echo ### Total coverage: ${TOTAL_COV}% >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate coverage badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: f6cec4c4c8e1733cfe45f807918a128a
+          filename: covbadge.json
+          label: coverage
+          message: ${{ env.total_cov }}%
+          minColorRange: 50
+          maxColorRange: 90
+          valColorRange: ${{ env.total_cov }}

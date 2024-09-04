@@ -4,6 +4,7 @@ on:
     branches:
       - '*'
     paths:
+      - .github/workflows/format.yaml
       - src/**
       - test/**
       - examples/**
@@ -24,13 +25,10 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: |
-          python -m pip install black isort
+        run: python -m pip install black isort
 
       - name: Run format check
-        run: |
-          python -m black . --check
+        run: python -m black . --check
 
       - name: Run import check
-        run: |
-          python -m isort . --check
+        run: python -m isort . --check
